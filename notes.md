@@ -48,9 +48,9 @@ typing of multiple loci, using DNA sequences of internal fragments of multiple h
 **Antibiotic resistance (CARD)**
 https://anaconda.org/bioconda/rgi
 
-**Virulence factors (VFDB)
+**Virulence factors (VFDB)**
 
 
 **plasmids (PLSDB)**
-
+https://ccb-microbe.cs.uni-saarland.de/plsdb
 
