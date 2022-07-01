@@ -31,8 +31,9 @@ You can use *reference(s)* for quality check
 **Gene annotation** 
 
 Gene prediction tools: 
-https://guides.library.yale.edu/bioinformatics/gene-prediction
-https://en.wikipedia.org/wiki/List_of_gene_prediction_software
-comparison paper: https://www.semanticscholar.org/paper/Comparative-Analysis-of-Gene-Prediction-Tools%3A-hmm-Jyoti-Saini/d2db652027e9862b9deffb558131311cadca526a
-GENEID
+- https://guides.library.yale.edu/bioinformatics/gene-prediction
+- https://en.wikipedia.org/wiki/List_of_gene_prediction_software
+- comparison paper: https://www.semanticscholar.org/paper/Comparative-Analysis-of-Gene-Prediction-Tools%3A-hmm-Jyoti-Saini/d2db652027e9862b9deffb558131311cadca526a
+- GENEID
+- Prodigal - https://www.biocode.ltd/catalog-tooldata/prodigal (conda, unsupervised, gff)
 
