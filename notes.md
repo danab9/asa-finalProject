@@ -35,5 +35,12 @@ Gene prediction tools:
 - https://en.wikipedia.org/wiki/List_of_gene_prediction_software
 - comparison paper: https://www.semanticscholar.org/paper/Comparative-Analysis-of-Gene-Prediction-Tools%3A-hmm-Jyoti-Saini/d2db652027e9862b9deffb558131311cadca526a
 - GENEID
+- AUGUSTUS: needs reference species
+- BRAKER: might be possible, trains AUGUSTUS (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6635606/) 
 - Prodigal - https://www.biocode.ltd/catalog-tooldata/prodigal (conda, unsupervised, gff)
+
+-------------------------------------------------
+**MLST**
+https://en.wikipedia.org/wiki/Multilocus_sequence_typing
+typing of multiple loci, using DNA sequences of internal fragments of multiple housekeeping genes to characterize isolates of microbial species.
 
