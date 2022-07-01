@@ -44,4 +44,13 @@ Gene prediction tools:
 https://en.wikipedia.org/wiki/Multilocus_sequence_typing
 typing of multiple loci, using DNA sequences of internal fragments of multiple housekeeping genes to characterize isolates of microbial species.
 - mlst https://github.com/tseemann/mlst conda
-- 
+
+**Antibiotic resistance (CARD)**
+https://anaconda.org/bioconda/rgi
+
+**Virulence factors (VFDB)
+
+
+**plasmids (PLSDB)**
+
+
