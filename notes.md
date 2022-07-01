@@ -22,6 +22,7 @@ You can use *reference(s)* for quality check
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8306402/
 "for the hybrid assembly strategy, more continuous assemblies can be achieved when using long reads in conjunction with Illumina reads. This strategy initiated the hybrid assembly with high-quality Illumina short reads and filled the gaps with ONT or PacBio long reads."
 
-**gene annotation** 
+**Gene annotation** 
+
 Gene prediction tools: https://guides.library.yale.edu/bioinformatics/gene-prediction
 GENEID
