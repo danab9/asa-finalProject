@@ -16,7 +16,9 @@ You can use *reference(s)* for quality check
 
 **Quality metrics**
 - BUSCO assembly and annotation completeness https://academic.oup.com/bioinformatics/article/31/19/3210/211866?login=true
-- QUAST quality assessment tool for genome assemblies https://pubmed.ncbi.nlm.nih.gov/23422339/
+- QUAST quality assessment tool for genome assemblies https://pubmed.ncbi.nlm.nih.gov/23422339/ 
+    - completeness, several metrics, e.g. No. of indels per 100 kb
+    - contiguitiy, metrics based on contigs, e.g. no. of contigs. largest contigs. 
 
 **Approaches comparison papers**
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8306402/
@@ -28,5 +30,9 @@ You can use *reference(s)* for quality check
 
 **Gene annotation** 
 
-Gene prediction tools: https://guides.library.yale.edu/bioinformatics/gene-prediction
+Gene prediction tools: 
+https://guides.library.yale.edu/bioinformatics/gene-prediction
+https://en.wikipedia.org/wiki/List_of_gene_prediction_software
+comparison paper: https://www.semanticscholar.org/paper/Comparative-Analysis-of-Gene-Prediction-Tools%3A-hmm-Jyoti-Saini/d2db652027e9862b9deffb558131311cadca526a
 GENEID
+
