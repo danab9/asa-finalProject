@@ -8,7 +8,7 @@
 - HASLR https://www.sciencedirect.com/science/article/pii/S2589004220305770 conda 
 - HybridSpades https://academic.oup.com/bioinformatics/article/32/7/1009/1743807?login=true conda
 - Unicycler https://github.com/rrwick/Unicycler *only for bacterial genomes* conda
-- MuSaCrA
+- MuSuRCA  https://academic.oup.com/bioinformatics/article/29/21/2669/195975 conda
 
 You can use *reference(s)* for quality check
 
