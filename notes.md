@@ -16,7 +16,7 @@ You can use *reference(s)* for quality check
 
 **Quality metrics**
 - BUSCO assembly and annotation completeness https://academic.oup.com/bioinformatics/article/31/19/3210/211866?login=true
-- QUAST
+- QUAST quality assessment tool for genome assemblies https://pubmed.ncbi.nlm.nih.gov/23422339/
 
 **Approaches comparison papers**
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8306402/
