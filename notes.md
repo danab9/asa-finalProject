@@ -21,6 +21,7 @@ You can use *reference(s)* for quality check
 **Approaches comparison papers**
 - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8306402/
 "for the hybrid assembly strategy, more continuous assemblies can be achieved when using long reads in conjunction with Illumina reads. This strategy initiated the hybrid assembly with high-quality Illumina short reads and filled the gaps with ONT or PacBio long reads."
+
 **Tools comparison papers**
 - https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-020-07041-8 - **Benchmarking hybrid assembly approaches for genomic analyses of bacterial pathogens using Illumina and Oxford Nanopore sequencing**
 "Unicycler performed the best for achieving contiguous genomes, closely followed by MaSuRCA, while all SPAdes assemblies were incomplete."
