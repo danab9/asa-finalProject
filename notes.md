@@ -46,11 +46,12 @@ typing of multiple loci, using DNA sequences of internal fragments of multiple h
 - mlst https://github.com/tseemann/mlst conda
 
 **Antibiotic resistance (CARD)**
-https://anaconda.org/bioconda/rgi
+- rgi https://anaconda.org/bioconda/rgi
 
 **Virulence factors (VFDB)**
-
+- blast using wget DNA db from http://www.mgc.ac.cn/VFs/download.htm (why DNA and not protein) 
+- PathoFact https://git-r3lab.uni.lu/laura.denies/PathoFact (difficult to use) 
 
 **plasmids (PLSDB)**
-https://ccb-microbe.cs.uni-saarland.de/plsdb
+- plsdb https://ccb-microbe.cs.uni-saarland.de/plsdb
 
