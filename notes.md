@@ -39,6 +39,8 @@ Gene prediction tools:
 - BRAKER: might be possible, trains AUGUSTUS (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6635606/) 
 - Prodigal - https://www.biocode.ltd/catalog-tooldata/prodigal (conda, unsupervised, gff)
 
+** Core Genome **
+- Spine - https://github.com/egonozer/Spine (conda)
 -------------------------------------------------
 **MLST**
 https://en.wikipedia.org/wiki/Multilocus_sequence_typing
