@@ -1,0 +1,15 @@
+samples:
+  short-reads: "resources/samples_short.tsv"
+  long-reads: ""
+
+
+# QC
+fastqc:
+  extra: ""
+
+multiqc:
+  extra: ""
+
+trimmomatic:
+  extra: "" # user can add any string 
+
