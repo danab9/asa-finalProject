@@ -15,8 +15,8 @@ trimming:
   long: 'False'
   short: 'False'
 screening: 
-  long: 'True'
-  short: 'True'   
+  long: 'False'
+  short: 'False'   
 decontamination: 
   long: "True"
   short: "True"
@@ -68,3 +68,6 @@ kraken:
 
 tree:
   method: "iqtree" #{fasttree,raxml,iqtree}
+
+quast:
+  extra: ""
