@@ -16,8 +16,7 @@ include: "rules/qc.smk"
 
 rule all:
     input: 
-        "results/denovo_assembly/ERR4082859/contigs.fasta"
-        "results/fastq/trimmed_ONT/ERR4082859_ONT.fastq.gz"
+        "results/assembly/ERR4082859/contigs.fasta"
 
 
 
