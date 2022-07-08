@@ -1,0 +1,6 @@
+name: assembly
+channels:
+  - defaults
+  - bioconda
+dependencies:
+  - unicycler

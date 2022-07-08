@@ -1,0 +1,7 @@
+Building DAG of jobs...
+MissingInputException in line 1 of /storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/rules/assembly.smk:
+Missing input files for rule assembly:
+    output: results/denovo_assembly/ERR4082859/contigs.fasta, results/denovo_assembly/ERR4082859
+    wildcards: sample=ERR4082859
+    affected files:
+        resources/fastq/ERR4082859_ONT.fastq
