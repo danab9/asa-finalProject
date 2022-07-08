@@ -70,14 +70,9 @@ rule trimmomatic_short_reads:
         r1_p= "results/fastq/trimmed_short/{sample}_1_P.fastq.gz", r1_u = "results/fastq/trimmed_short/{sample}_1_UP.fastq.gz",
         r2_p= "results/fastq/trimmed_short/{sample}_2_P.fastq.gz", r2_u = "results/fastq/trimmed_short/{sample}_2_UP.fastq.gz"
     params:
-<<<<<<< HEAD
         trailing = config["trimmomatic_short"]['trailing'],
         illuminaclip = ':'.join(config["trimmomatic_short"]["illuminaclip"].values()),
         extra = config["trimmomatic_short"]['extra']
-=======
-        trailing = config["trimmomatic"]['trailing'], 
-        illuminaclip = ':'.join(config["trimmomatic"]["illuminaclip"].values())
->>>>>>> 09e086efa5f5a1d0c78af1fac0707fad99997332
     conda:
         "../envs/qc.yaml"
     log:
