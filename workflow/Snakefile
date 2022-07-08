@@ -10,9 +10,12 @@ IDS = [s for s in list(samples.index)][0]
 wildcard_constraints:
     sample = config["regular_expression"]
 
-#include: "rules/qc.smk"
+
 include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
+include: "rules/qc.smk"
+
+
 
 rule all:
     input: 

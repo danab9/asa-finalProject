@@ -1,3 +1,9 @@
+config.yaml
+.idea/asa-finalProject.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml
 .snakemake/
 results/
 resources/kraken_db
