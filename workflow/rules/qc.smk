@@ -34,7 +34,7 @@ rule trimmomatic:
         r1_p= "results/fastq/trimmed/{sample}_1_P.fastq.gz", r1_u = "results/fastq/trimmed/{sample}_1_UP.fastq.gz",
         r2_p= "results/fastq/trimmed/{sample}_2_P.fastq.gz", r2_u = "results/fastq/trimmed/{sample}_2_UP.fastq.gz"
     params:
-        trailing = config["trimmomatic"]['trailing'],
+        trailing = config["trimmomatic"]['trailing'], 
         illuminaclip = ':'.join(config["trimmomatic"]["illuminaclip"].values())
     conda:
         "../envs/qc.yaml"

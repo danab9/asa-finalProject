@@ -1,9 +1,14 @@
 samples: "resources/samples.tsv"
-  short_reads: "resources/samples_short.tsv"
-  long_reads: "resources/samples_long.tsv"
-  regular_expression: "[^/]+" #Sample IDs should match the long and short reads. 
+  # short_reads: "resources/samples_short.tsv"
+  # long_reads: "resources/samples_long.tsv"
+regular_expression: "[^/]+" #Sample IDs should match the long and short reads. 
 
 hybrid_assembly: "yes" # "yes"/"no", 
+
+# parameters:
+skip_trimming: 'True'
+skip_fastQC: 'True'
+skip_qualimap: 'True'
 
 # QC
 fastqc:

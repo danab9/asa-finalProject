@@ -1,0 +1,3 @@
+SyntaxError in line 2 of /storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/rules/assembly.smk:
+EOF in multi-line statement (assembly.smk, line 2)
+  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile", line 14, in <module>

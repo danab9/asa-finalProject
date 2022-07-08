@@ -1,0 +1,21 @@
+configfile : "config/config.yaml"
+import pandas as pd
+
+samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t')
+IDS = [s for s in list(samples.index)]
+#short_samples = pd.read_csv(config["samples"]["short_reads"],index_col="sample", sep ='\t')
+#IDs = [s for s in list(short_samples.index)]
+#long_samples = pd.read_csv(config["samples"]["long_reads"],index_col="sample", sep ='\t')
+
+wildcard_constraints:
+    sample = config["regular_expression"]
+
+#include: "rules/qc.smk"
+include: "rules/assembly.smk"
+
+rule all:
+    input: 
+        "results/denovo_assembly/ERR4082859/contigs.fasta"
+
+
+
