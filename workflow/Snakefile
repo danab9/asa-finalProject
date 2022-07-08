@@ -11,10 +11,12 @@ wildcard_constraints:
     sample = config["regular_expression"]
 
 
+
 include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
 include: "rules/mlst.smk"
 # include: "rules/qc.smk"
+include: "rules/qc.smk"
 
 
 
@@ -25,5 +27,9 @@ rule all:
         table = "results/resistance/ERR4082859.tsv",
         genomes = expand("results/genomes/{sample}.fasta",sample=IDS)
 
+        assembly = "results/assembly/ERR4082859/assembly.fasta",
+        decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
+        screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
+        # quast = "results/qc/assembly/{sample}/report.txt"
 
 
