@@ -1,6 +1,6 @@
 name: longqc
 channels:
-  - defaults
   - bioconda
+  - conda-forge
 dependencies:
   - longqc=1.2.0c

@@ -11,7 +11,7 @@ wildcard_constraints:
     sample = config["regular_expression"]
 
 include: "rules/qc.smk"
-# include: "rules/assembly.smk"
+include: "rules/assembly.smk"
 
 
 rule all:

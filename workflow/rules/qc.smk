@@ -100,10 +100,10 @@ rule porechop:  # trimming of ONT
 
 rule multiqc:
     input:
-        fqc=expand("results/qc/fastq/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']) if config["skip_trimming"] in['False',''] else [],
+        fqc=expand("results/qc/fastq/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']),
         tqc=expand("results/qc/trimmed_short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P', 'UP'])
-            if config['skip_fastQC'] in ['False',''] else [],
-        #longqc=expand("results/qc/trimmed_ONT/{sample}.html") # TODO: check if correct format
+            if config['qc']['short'] != 'False' and config['trimming']['short'] != 'False' else [],
+        longqc=expand("results/qc/trimmed_ONT/{sample}.html") if config["qc"]["long"] != 'False' and config['trimming']['long'] != 'False' else []# TODO: check if correct format
     output:
         "results/qc/multiqc_report.html"
     conda:
