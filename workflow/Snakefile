@@ -2,7 +2,7 @@ configfile : "config/config.yaml"
 import pandas as pd
 
 samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t')
-IDS = [s for s in list(samples.index)][0]
+IDS = [s for s in list(samples.index)]
 #short_samples = pd.read_csv(config["samples"]["short_reads"],index_col="sample", sep ='\t')
 #IDs = [s for s in list(short_samples.index)]
 #long_samples = pd.read_csv(config["samples"]["long_reads"],index_col="sample", sep ='\t')
@@ -13,15 +13,17 @@ wildcard_constraints:
 
 include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
+include: "rules/mlst.smk"
 # include: "rules/qc.smk"
 
 
 
 rule all:
     input: 
-        assembly = "results/assembly/ERR4082859/assembly.fasta",
-        decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
-        screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
+        #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
+        #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
+        table = "results/resistance/ERR4082859.tsv",
+        genomes = expand("results/genomes/{sample}.fasta",sample=IDS)
 
 
 

@@ -7,7 +7,6 @@ contamination_reference:
   # short_reads: "resources/samples_short.tsv"
   # long_reads: "resources/samples_long.tsv"
 
-
 #OPTIONAL STEPS
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
@@ -25,6 +24,7 @@ qc:
   short: 'False'
 #Assembly 
 hybrid_assembly: "True" 
+busco: "True"
 #Analysis 
 mlst: 'False'
 resistance: 'False'
