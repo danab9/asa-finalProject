@@ -5,7 +5,7 @@ rule short_kraken:
     output:
         clasified_reads_1 = "results/fastq/kraken/{sample}_1.fq",
         clasified_reads_2 = "results/fastq/kraken/{sample}_2.fq",
-        report = "report/kraken/short/{sample}.txt"
+        report = "results/report/kraken/short/{sample}.txt"
     log:
         "results/logs/kraken/short/{sample}.log"
     threads: 10
@@ -19,10 +19,10 @@ rule short_kraken:
 
 rule long_kraken: 
     input:
-        long=(lambda wildcards: samples.at[wildcards.sample, 'long']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/{sample}_long.fastq.gz",
+        long=(lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/{sample}_long.fastq.gz",
     output:
         clasified_reads = "results/fastq/kraken/{sample}_long.fq",
-        report = "report/kraken/long/{sample}.txt"
+        report = "results/report/kraken/long/{sample}.txt"
     log:
         "results/logs/kraken/long/{sample}.log"
     threads: 10
@@ -32,14 +32,14 @@ rule long_kraken:
     conda:
         "../envs/decontamination.yaml"
     shell:
-        "kraken2 -db {params.kraken_db} {params.quick} --classified-out results/fastq/kraken/{wildcards.sample}.fq {input.long} --report {output.report} --threads {threads} &> {log}"
+        "kraken2 -db {params.kraken_db} {params.quick} --classified-out {output.clasified_reads} {input.long} --report {output.report} --threads {threads} &> {log}"
 
 rule screen: # for short and long, #creates a multiqc report of the screened reads in the folder qc/screened
     input:
-        screen_short = expand("report/kraken/short/{sample}.txt",sample=IDS) if config["screening"]["short"] == "True" else [], #for all samples. 
-        screen_long = expand("report/kraken/long/{sample}.txt",sample=IDS) if config["screening"]["long"] == "True" else [],
+        screen_short = expand("results/report/kraken/short/{sample}.txt",sample=IDS) if config["screening"]["short"] == "True" else [], #for all samples. 
+        screen_long = expand("results/report/kraken/long/{sample}.txt",sample=IDS) if config["screening"]["long"] == "True" else [],
     output:
-        "report/kraken/multiqc_report.html"
+        "results/report/kraken/multiqc_report.html"
     conda:
         "../envs/multiqc.yaml"
     log:
@@ -48,14 +48,15 @@ rule screen: # for short and long, #creates a multiqc report of the screened rea
     params:
         config["multiqc"]["extra"]  
     shell:
-        "multiqc report/kraken {params} -o report/kraken &> {log}"
+        "multiqc results/report/kraken {params} -o results/report/kraken &> {log}"
 
 rule short_bowtie2_build_contamination:
     input:
         config["contamination_reference"]["short"]
     output:
         multiext(
-            "results/references/contamination/contamination_reference_short",
+            "results/references/contamination/contamination_reference_short", 
+            ".fa",
             ".1.bt2",
             ".2.bt2",
             ".3.bt2",
@@ -77,11 +78,11 @@ rule short_bowtie2_build_contamination:
 
 rule short_bowtie_map_contaminations:
     input:
-        ref="results/references/contamination/contamination_reference.fa",
+        ref="results/references/contamination/contamination_reference_short.fa",
         #@Sandro: It is true that we don't use the config defined directory here, but this dir is used in the build rule above,
         # this rule copies the user defined file name to this new location, so that bowtie build can use it.
         indexed_ref= multiext(
-            "results/references/contamination/contamination_reference",
+            "results/references/contamination/contamination_reference_short",
             ".1.bt2",
             ".2.bt2",
             ".3.bt2",
@@ -100,7 +101,7 @@ rule short_bowtie_map_contaminations:
     conda:
         "../envs/decontamination.yaml"
     shell:
-        "bowtie2 -x results/references/contamination/contamination_reference -1 {input.r1} -2 {input.r2} -S {output} --threads {threads} &> {log}"
+        "bowtie2 -x results/references/contamination/contamination_reference_short -1 {input.r1} -2 {input.r2} -S {output} --threads {threads} &> {log}"
 
 rule short_keep_unmapped:   # TODO: see https://gist.github.com/darencard/72ddd9e6c08aaff5ff64ca512a04a6dd
     input:
@@ -126,52 +127,62 @@ rule short_sam_to_fastq:
     log:
         "results/logs/bamtofq/{sample}_decontaminated.log"
     shell:
-        "bedtools bamtofastq -i {input} -fq {output.fq1} -fq2 {output.fq2} 2> {log}"
+        "bedtools bamtofastq -i {input} -fq {output.short_1} -fq2 {output.short_2} 2> {log}"
+
+rule long_sam_to_fastq:
+    input:
+        bam = "results/bam_decontaminated/long/{sample}.bam"
+    output:
+        long="results/fastq/decontaminated/long/{sample}.fq"
+    conda:
+        "../envs/decontamination.yaml"
+    log:
+        "results/logs/bamtofq/{sample}_decontaminated.log"
+    shell:
+        "bedtools bamtofastq -i {input} -fq {output.long} 2> {log}"
 
 rule long_decontamination:
     input:
         reference = config["contamination_reference"]["long"],
         long = "results/fastq/trimmed/{sample}_1_P.fastq.gz" if config["trimming"]["long"]=='True' else (lambda wildcards: samples.at[wildcards.sample, 'ONT']),
     output:
-        artificial_reference = "results/references/artificial/bam/{sample}.bam" 
-        "results/fastq/decontaminated/short/{sample}_2.fq"
+        bam = "results/bam_decontaminated/long/{sample}.bam"
     log:
         "results/logs/artificialreference/{sample}.log"
     threads: 4
     conda:
         "../envs/decontamination.yaml"
     shell:
-        "minimap2 -t {threads} -a {input.best_reference} {input.contigs} 2> {log} | samtools view -b - > {output.artificial_reference} 2> {log}"
+        "minimap2 -t {threads} -a {input.reference} {input.long} 2> {log} | samtools view -b - > {output.bam} 2> {log}"
 
-rule long_decontamination_2:
-    input:
-        "results/references/artificial/bam/{sample}.bam"
-    output:
-        "results/references/artificial/bam_sorted/{sample}.bam"
-    log:
-        "results/logs/samtools/artificial/{sample}_sort.log"
-    threads: 4
-    conda:
-        "../envs/decontamination.yaml"
-    shell:
-        "samtools sort {input} -o {output} --threads {threads} &> {log}"
+# rule long_decontamination_2:
+#     input:
+#         "results/references/artificial/bam/{sample}.bam"
+#     output:
+#         "results/references/artificial/bam_sorted/{sample}.bam"
+#     log:
+#         "results/logs/samtools/artificial/{sample}_sort.log"
+#     threads: 4
+#     conda:
+#         "../envs/decontamination.yaml"
+#     shell:
+#         "samtools sort {input} -o {output} --threads {threads} &> {log}"
 
-rule long_decontamination_3:
-    input:
-        best_reference = "results/references/best_references/{sample}.fasta",
-        bam_sorted = "results/references/artificial/bam_sorted/{sample}.bam"
-    output:
-        consensus = "results/references/artificial/{sample}.fa"
-    log:
-        "results/logs/bcsf/{sample}.log"
-    threads: 1
-    conda:
-        "../envs/decontamination.yaml"
-    shell:
-        """
-        bcftools mpileup -B -Ou -f {input.best_reference} {input.bam_sorted} | bcftools call -mv -M -Oz -o results/{wildcards.sample}_calls.vcf.gz 2> {log}
-        bcftools index results/{wildcards.sample}_calls.vcf.gz -f 2> {log}
-        cat {input.best_reference} | bcftools consensus results/{wildcards.sample}_calls.vcf.gz > {output.consensus} 2> {log}
-        """
+# rule long_decontamination_3:
+#     input:
+#         best_reference = "results/references/best_references/{sample}.fasta",
+#         bam_sorted = "results/references/artificial/bam_sorted/{sample}.bam"
+#     output:
+#         consensus = "results/fastq/decontaminated/long/{sample}.fq"
+#     log:
+#         "results/logs/bcsf/{sample}.log"
+#     threads: 1
+#     conda:
+#         "../envs/decontamination.yaml"
+#     shell:
+#         """
+#         bcftools mpileup -B -Ou -f {input.best_reference} {input.bam_sorted} | bcftools call -mv -M -Oz -o results/{wildcards.sample}_calls.vcf.gz 2> {log}
+#         bcftools index results/{wildcards.sample}_calls.vcf.gz -f 2> {log}
+#         cat {input.best_reference} | bcftools consensus results/{wildcards.sample}_calls.vcf.gz > {output.consensus} 2> {log}
+#         """
 
-        #"../envs/decontamination.yaml" -- envs artifical ref, decontamination 

@@ -15,11 +15,11 @@ trimming:
   long: 'False'
   short: 'False'
 screening: 
-  long: 'False'
+  long: 'True'
   short: 'True'   
 decontamination: 
-  long: "False"
-  short: "False"
+  long: "True"
+  short: "True"
 qc:
   long: 'False'
   short: 'False'
