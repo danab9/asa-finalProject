@@ -1,0 +1,13 @@
+name: decontamination
+channels:
+  - defaults
+  - bioconda
+dependencies:
+  - samtools
+  - bedtools
+  - bowtie2
+  - kraken2
+  - minimap2
+  - bcftools=1.9
+  
+prefix: /Users/danabarilan/opt/miniconda3/envs/seqAnalysis

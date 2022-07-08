@@ -1,7 +1,9 @@
 #DIRECTORIES 
 samples: "resources/samples.tsv"
 regular_expression: "[^/]+" #Sample IDs should match the long and short reads. 
-
+contamination_reference:
+  long: "resources/references/contamination_long.fasta"
+  short: "resources/references/contamination_short.fasta"
   # short_reads: "resources/samples_short.tsv"
   # long_reads: "resources/samples_long.tsv"
 
@@ -14,7 +16,7 @@ trimming:
   short: 'False'
 screening: 
   long: 'False'
-  short: 'False'  
+  short: 'True'   
 decontamination: 
   long: "False"
   short: "False"
