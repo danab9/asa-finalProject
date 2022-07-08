@@ -1,7 +1,9 @@
-samples:
-  short-reads: "resources/samples_short.tsv"
-  long-reads: ""
+samples: "resources/samples.tsv"
+  short_reads: "resources/samples_short.tsv"
+  long_reads: "resources/samples_long.tsv"
+  regular_expression: "[^/]+" #Sample IDs should match the long and short reads. 
 
+hybrid_assembly: "yes" # "yes"/"no", 
 
 # QC
 fastqc:
@@ -13,3 +15,5 @@ multiqc:
 trimmomatic:
   extra: "" # user can add any string 
 
+unicycler:
+  extra: "" #https://github.com/rrwick/Unicycler#method-hybrid-assembly
