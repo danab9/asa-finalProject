@@ -10,12 +10,14 @@ IDS = [s for s in list(samples.index)]
 wildcard_constraints:
     sample = config["regular_expression"]
 
-#include: "rules/qc.smk"
-include: "rules/assembly.smk"
+include: "rules/qc.smk"
+# include: "rules/assembly.smk"
+
 
 rule all:
     input: 
         "results/denovo_assembly/ERR4082859/contigs.fasta"
+        "results/fastq/trimmed_ONT/ERR4082859_ONT.fastq.gz"
 
 
 

@@ -62,7 +62,7 @@ rule longqc_trimmed:
     
 
 
-rule trimmomatic_short_reads:
+rule trimmomatic:
     input:
         r1 = lambda wildcards: samples.at[wildcards.sample, 'fq1'],
         r2 = lambda wildcards: samples.at[wildcards.sample, 'fq2']
@@ -70,34 +70,32 @@ rule trimmomatic_short_reads:
         r1_p= "results/fastq/trimmed_short/{sample}_1_P.fastq.gz", r1_u = "results/fastq/trimmed_short/{sample}_1_UP.fastq.gz",
         r2_p= "results/fastq/trimmed_short/{sample}_2_P.fastq.gz", r2_u = "results/fastq/trimmed_short/{sample}_2_UP.fastq.gz"
     params:
-        trailing = config["trimmomatic_short"]['trailing'],
-        illuminaclip = ':'.join(config["trimmomatic_short"]["illuminaclip"].values()),
-        extra = config["trimmomatic_short"]['extra']
+        trailing = config["trimmomatic"]['trailing'],
+        illuminaclip = ':'.join(config["trimmomatic"]["illuminaclip"].values()),
+        extra = config["trimmomatic"]['extra']
     conda:
         "../envs/qc.yaml"
     log:
-        "results/logs/trimmomatic_short_reads/{sample}.log"
+        "results/logs/trimmomatic/{sample}.log"
     threads: 4
     shell:
         "trimmomatic PE {input.r1} {input.r2} {output.r1_p} {output.r1_u} {output.r2_p} {output.r2_u} TRAILING:{params.trailing} ILLUMINACLIP:{params.illuminaclip} -threads {threads} {params.extra} -trimlog {log}"
 
 
-rule trimmomatic_long_reads:
-    input: 
+rule porechop:  # trimming of ONT
+    input:
         lambda wildcards: samples.at[wildcards.sample, 'ONT']
-    output: 
+    output:
         "results/fastq/trimmed_ONT/{sample}.fastq.gz"
-    log: 
-        "results/logs/trimmomatic_ONT/{sample}.log"
     params:
-        extra = config["trimmomatic_ONT"]['extra'],
-        trailing = config["trimmomatic_ONT"]['trailing']
+        extra = config["porechop"]["extra"]
     conda:
-        "../envs/qc.yaml"
-    threads: 4
+        "../envs/porechop.yaml"
+    log: 
+        "results/logs/porechop/{sample}.log"
+    threads: 8
     shell:
-        "trimmomatic SE {inpug} {output} -threads {threads} TRAILING:{params.trailing} -trimlog {log} {params.extra}"
-
+        "porechop -i {input} -o {output} --threads {threads} --format fastq.gz {params.extra} &> {log}"
 
 
 rule multiqc:
@@ -105,7 +103,7 @@ rule multiqc:
         fqc=expand("results/qc/fastq/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']) if config["skip_trimming"] in['False',''] else [],
         tqc=expand("results/qc/trimmed_short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P', 'UP'])
             if config['skip_fastQC'] in ['False',''] else [],
-        longqc=expand("results/qc/trimmed_ONT/{sample}.html") # TODO: check if correct format
+        #longqc=expand("results/qc/trimmed_ONT/{sample}.html") # TODO: check if correct format
     output:
         "results/qc/multiqc_report.html"
     conda:
