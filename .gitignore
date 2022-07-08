@@ -6,3 +6,4 @@ config.yaml
 .idea/inspectionProfiles/profiles_settings.xml
 .snakemake/
 results/
+resources/kraken_db
