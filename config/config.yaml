@@ -36,11 +36,25 @@ plasmids: 'False'
 fastqc:
   extra: ""
 
+longqc:
+  preset: ont-rapid  # what comes after -x
+  extra: ""
+
 multiqc:
   extra: ""
 
-trimmomatic:
-  extra: "" # user can add any string 
+trimmomatic_short:
+  trailing: 20
+  illuminaclip:
+    file: "resources/adapters/TruSeq3-PE.fa"
+    seedMissmatches: '2'
+    palindromeClipThreshold: '30'
+    simpleClipThreshold: '10'
+  extra: "" 
+
+trimmomatic_ONT:
+trailing: 20
+extra: ""
 
 unicycler:
   extra: "" #https://github.com/rrwick/Unicycler#method-hybrid-assembly
