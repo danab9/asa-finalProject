@@ -15,7 +15,7 @@ include: "rules/assembly.smk"
 
 rule all:
     input: 
-        "results/denovo_assembly/ERR4082859/contigs.fasta"
+        "results/assembly/ERR4082859/contigs.fasta"
 
 
 

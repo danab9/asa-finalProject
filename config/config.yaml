@@ -1,16 +1,38 @@
+#DIRECTORIES 
 samples: "resources/samples.tsv"
-  # short_reads: "resources/samples_short.tsv"
-  # long_reads: "resources/samples_long.tsv"
 regular_expression: "[^/]+" #Sample IDs should match the long and short reads. 
 
-hybrid_assembly: "yes" # "yes"/"no", 
+  # short_reads: "resources/samples_short.tsv"
+  # long_reads: "resources/samples_long.tsv"
 
-# parameters:
-skip_trimming: 'True'
-skip_fastQC: 'True'
-skip_qualimap: 'True'
 
-# QC
+#OPTIONAL STEPS
+#Optional workflow steps can be set to "True" or "False" each 
+#Preprocessing 
+trimming: 
+  long: 'False'
+  short: 'False'
+screening: 
+  long: 'False'
+  short: 'False'  
+decontamination: 
+  long: "False"
+  short: "False"
+qc:
+  long: 'False'
+  short: 'False'
+#Assembly 
+hybrid_assembly: "True" 
+#Analysis 
+mlst: 'False'
+resistance: 'False'
+virulence: 'False'
+plasmids: 'False'
+
+
+#PARAMETERS
+#Paremeters. Set to the default used in our pipeline. 
+#In extra any string can be provided.  A link is given to the manual of the respective tool. 
 fastqc:
   extra: ""
 
@@ -22,3 +44,10 @@ trimmomatic:
 
 unicycler:
   extra: "" #https://github.com/rrwick/Unicycler#method-hybrid-assembly
+
+kraken: 
+  database: "resources/kraken_db" #directory to the kraken database used for screening. 
+  quick: "True" #https://github.com/DerrickWood/kraken2/wiki/Manual
+
+tree:
+  method: "iqtree" #{fasttree,raxml,iqtree}
