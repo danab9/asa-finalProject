@@ -5,7 +5,7 @@ samples = pd.read_csv(config["samples"],index_col="sample", sep ='\t')
 IDS=[s for s in list(samples.index)]
 
 wildcard_constraints:
-    sample= "[^/]+"
+    sample= "[^/]+"  # TODO: is it still needed?
 
 # include:
 # rule all:

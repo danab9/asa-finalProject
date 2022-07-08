@@ -1,7 +1,6 @@
-name: qc
+name: longqc
 channels:
   - defaults
   - bioconda
 dependencies:
-  - fastqc=0.11.8
-  - trimmomatic=0.39
+  - longqc=1.2.0c
