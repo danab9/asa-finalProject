@@ -1,0 +1,13 @@
+name: assembly
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - fasttree=2.1.11
+  - mafft=7.505
+  - iqtree=2.2.0.3
+  - pip:
+      - augur=16.0.3
+      - nextstrain-augur #I cannot find the version of nextstrain-augur 
+      - newick=1.3.2

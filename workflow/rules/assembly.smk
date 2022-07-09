@@ -9,7 +9,7 @@ rule assembly:
     conda:
         "../envs/assembly.yaml"
     log:
-        "results/logs/assembly_{sample}.log"
+        "results/logs/assembly/{sample}.log"
     threads: 10
     params:
         extra = config["unicycler"]["extra"],
