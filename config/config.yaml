@@ -1,12 +1,11 @@
 #DIRECTORIES 
 samples: "resources/samples.tsv"
-regular_expression: "[^/]+" #Sample IDs should match the long and short reads. 
+regular_expression: "[^/]+" #Defines that a "/" is not allowed in sample names.  
 contamination_reference:
   long: "resources/references/contamination_long.fasta"
   short: "resources/references/contamination_short.fasta"
-  # short_reads: "resources/samples_short.tsv"
-  # long_reads: "resources/samples_long.tsv"
-
+virulence_database: "" #if default = "results/virulence_database/VFDB_setA_nt.fas", it will download it under this directory. 
+plasmids_database: "" 
 
 #OPTIONAL STEPS
 #Optional workflow steps can be set to "True" or "False" each 
@@ -25,6 +24,7 @@ qc:
   short: 'False'
 #Assembly 
 hybrid_assembly: "True" 
+busco: "True"
 #Analysis 
 mlst: 'False'
 resistance: 'False'
@@ -55,10 +55,8 @@ trimmomatic:
   extra: "" 
 
 porechop:
-
   extra: ""
 
-# assembly
 unicycler:
   extra: "" #https://github.com/rrwick/Unicycler#method-hybrid-assembly
 
@@ -68,6 +66,7 @@ kraken:
 
 tree:
   method: "iqtree" #{fasttree,raxml,iqtree}
+  extra: ""
 
 quast:
   extra: ""
@@ -75,4 +74,12 @@ quast:
 busco:
   run: "False"
   lineage: "" #path to lineage file
+rgi:
+  extra: ""
+
+blastn:
+  extra: ""
+
+roary:
+  percentage_threshold: "95"
   extra: ""

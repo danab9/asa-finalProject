@@ -1,0 +1,7 @@
+name: multiqc
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - blast=2.5

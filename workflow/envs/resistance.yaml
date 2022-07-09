@@ -1,0 +1,7 @@
+name: multiqc
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - rgi=5.2.1
