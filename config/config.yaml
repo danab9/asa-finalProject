@@ -71,6 +71,9 @@ tree:
 quast:
   extra: ""
 
+busco:
+  run: "False"
+  lineage: "" #path to lineage file
 rgi:
   extra: ""
 

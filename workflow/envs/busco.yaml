@@ -1,0 +1,6 @@
+name: busco
+channels:
+  - defaults
+  - bioconda
+dependencies:
+  - busco=4.1.2
