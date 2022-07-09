@@ -14,12 +14,14 @@ include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
 include: "rules/analysis.smk"
 include: "rules/qc.smk"
-
+include: "rules/phylogenetics.smk"
+include: "rules/pangenome.smk"
+include: "rules/annotation.smk"
 
 
 rule all:
     input: 
-        table =  "results/plasmids/ERR4082859.tsv",
+        table =  "results/pangenome.txt",
         # genomes = expand("results/genomes/{sample}.fasta",sample=IDS),
         # assembly = "results/assembly/ERR4082859/assembly.fasta",
         # decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 

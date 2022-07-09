@@ -1,0 +1,7 @@
+name: pangenome
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - roary=3.13.0
