@@ -43,7 +43,6 @@ Each of the optional steps can be set to "True" or "False" to indicate whether t
 For each of the preprocessing steps (trimming, screening, decontamination and qc) the user can further specify whether the step should be performed. 
 Note that by putting on an optional step might require you to provide an additional directory to a database. 
 <img src="workflow_diagram.png" style=" width:40%; " > <img src="prepros.png" style=" width:40%; " >
-<div style="width: 640px; height: 480px; margin: 10px; position: relative;"><iframe allowfullscreen frameborder="0" style="width:640px; height:480px" src="https://lucid.app/documents/embedded/5f2ab617-3502-451c-8f50-f827fc102d44" id="b1nx-LGr3ssl"></iframe></div>
 
 ## Parameters 
 For most steps in the pipeline it is possible to tailor the parameters to your needs, when using different bacterial sequencing data. 
