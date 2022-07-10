@@ -58,7 +58,7 @@ For more options, see the full manual by `porechop` [here](https://github.com/rr
 -------------------------------------------------------
 
 ## Results
-The results can be found under the result directory after running the pipeline. Also intermediate results are present, usually they can be found to facilitate rerunning the pipeline partially. We kindly refer you to the attached report if you want to learn more on how to interpret the results. 
+The results can be found under the result directory after running the pipeline. Also intermediate results are present, usually they can be found to facilitate rerunning the pipeline partially. We kindly refer you to the attached report if you want to learn more on how to interpret the results. Furthermore, log files are available under `results/log` for each step in the pipeline. 
 - **Assembled genomes**: The assembled genomes can be found as FASTA files under `results/genomes`.
 - **Annotations**: The annotations of the genomes can be found as GFF files under `results/annotations`.
 - **Quality metrics**: Quality metrics are available under `results/reports`. The preprocessing quality metrics are aggregated for the multiple samples, and so are the quality metrics of assembled genomes. 
