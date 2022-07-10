@@ -40,19 +40,19 @@ plasmids: 'False'
 #Paremeters. Set to the default used in our pipeline. 
 #In extra any string can be provided.  A link is given to the manual of the respective tool. 
 fastqc:
-  extra: ""
-longqc:
-  preset: ont-rapid  # what comes after -x
-  extra: "" #
+  extra: "" #https://hbctraining.github.io/Intro-to-rnaseq-hpc-salmon-flipped/lessons/06_qc_running_fastqc_sbatch.html
+longqc: 
+  preset: ont-rapid  #Specifies a platform/kit to be evaluated {pb-rs2, pb-sequel, ont-ligation, ont-rapid, ont-1dsq}
+  extra: "" #https://github.com/yfukasawa/LongQC
 multiqc:
   extra: "" #https://github.com/ewels/MultiQC
 trimmomatic:
-  trailing: 20
+  trailing: 20 #Specifies the minimum quality required to keep a base.
   illuminaclip:
-    file: "resources/adapters/TruSeq3-PE.fa"
-    seedMissmatches: '2'
-    palindromeClipThreshold: '30'
-    simpleClipThreshold: '10'
+    file: "resources/adapters/TruSeq3-PE.fa" #Path to the adapters, should be provided if trimming for short reads is set to true. 
+    seedMissmatches: '2' #Specifies the maximum mismatch count which will still allow a full match to be performed
+    palindromeClipThreshold: '30' #Specifies how accurate the match between the two 'adapter ligated' reads must be for PE palindrome read alignment.
+    simpleClipThreshold: '10' #Specifies how accurate the match between any adapter etc. sequence must be against a read.
   extra: ""  #https://github.com/usadellab/Trimmomatic
 porechop:
   extra: "" #https://github.com/rrwick/Porechop
@@ -66,14 +66,10 @@ tree:
   extra: ""
 quast:
   extra: ""
-
-# if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
-busco_params:
-  lineage: "bacteria_odb10" # path to lineage file
+busco_params: #If BUSCO is set to true: if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
+  lineage: "bacteria_odb10" # Path to lineage file 
   offline: "False" 
   extra: "" #https://github.com/metashot/busco
-  
-
 rgi:
   extra: "" #https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
 blastn:
