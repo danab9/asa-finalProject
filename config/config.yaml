@@ -1,13 +1,16 @@
 #DIRECTORIES 
+#-----------------
 samples: "resources/samples.tsv"
-regular_expression: "[^/]+" #Defines that a "/" is not allowed in sample names.  
+regular_expression: "[^/]+" #Defines that a "/" is not allowed in sample names, as was stated in the README  --> TODO, move to snakefile! 
 contamination_reference:
-  long: "resources/references/contamination_long.fasta"
-  short: "resources/references/contamination_short.fasta"
-virulence_database: "" #if default = "results/virulence_database/VFDB_setA_nt.fas", it will download it under this directory. 
-plasmids_database: "" 
+  long: "resources/references/contamination_long.fasta" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
+  short: "resources/references/contamination_short.fasta" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
+virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
+plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
+
 
 #OPTIONAL STEPS
+#-----------------
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
 trimming: 
@@ -33,18 +36,16 @@ plasmids: 'False'
 
 
 #PARAMETERS
+#-----------------
 #Paremeters. Set to the default used in our pipeline. 
 #In extra any string can be provided.  A link is given to the manual of the respective tool. 
 fastqc:
   extra: ""
-
 longqc:
   preset: ont-rapid  # what comes after -x
-  extra: ""
-
+  extra: "" #
 multiqc:
-  extra: ""
-
+  extra: "" #https://github.com/ewels/MultiQC
 trimmomatic:
   trailing: 20
   illuminaclip:
@@ -52,40 +53,33 @@ trimmomatic:
     seedMissmatches: '2'
     palindromeClipThreshold: '30'
     simpleClipThreshold: '10'
-  extra: "" 
-
+  extra: ""  #https://github.com/usadellab/Trimmomatic
 porechop:
-  extra: ""
-
+  extra: "" #https://github.com/rrwick/Porechop
 unicycler:
   extra: "" #https://github.com/rrwick/Unicycler#method-hybrid-assembly
-
 kraken: 
-  database: "resources/kraken_db" #directory to the kraken database used for screening. 
+  database: "resources/kraken_db" #If screening for either long or short reads is set to true, a Kraken database should be provided here. 
   quick: "True" #https://github.com/DerrickWood/kraken2/wiki/Manual
-
 tree:
-  method: "iqtree" #{fasttree,raxml,iqtree}
+  method: "iqtree" #Algorithm used for infering the phylogeny {fasttree,raxml,iqtree}
   extra: ""
-
 quast:
   extra: ""
 
 # if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
 busco_params:
   lineage: "bacteria_odb10"
-  offline: "False"
-  extra: ""
+  offline: "False" # path to lineage file
+  extra: "" #https://github.com/metashot/busco
   
+
 rgi:
-  extra: ""
-
+  extra: "" #https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
 blastn:
-  extra: ""
-
+  extra: "" #https://www.ncbi.nlm.nih.gov/books/NBK569856/
 prodigal:
-  extra: ""
-
-roary:
-  percentage_threshold: "95"
-  extra: ""
+  extra: "" #https://www.biocode.ltd/catalog-tooldata/prodigal
+roary: 
+  percentage_threshold: "95" #percentage of isolates a gene must be in to be core
+  extra: "" #https://sanger-pathogens.github.io/Roary/
