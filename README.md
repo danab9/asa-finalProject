@@ -22,8 +22,6 @@ snakemake --cores 8 --use-conda
 The main function `rule all` in the Snakefile under the workflow directory is called automatically upon running snakemake. To tailor the pipeline to your needs, please refer to the [optional steps]() that can be set in the configuration file. It is also possible to run the pipeline up until a certain rule. Please refer to the [Snakemake tutorial](https://snakemake.readthedocs.io/en/stable/tutorial/tutorial.html) for more information. 
 
 -------------------------------------------------------
-# Input data
-
 
 # Configuration file 
 The configuration file `config.yaml` can be found under the `config` directory, and can be used to add direcotry paths, to in or exclude optional steps, and to change parameters. All settings are set to their default values as were used in our sample workflow.     
