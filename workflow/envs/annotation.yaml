@@ -1,6 +1,6 @@
-name: pangenome
+name: annotation
 channels:
   - defaults
   - bioconda
 dependencies:
-  - roary=3.7.0=0
+  - prodigal=2.6.3=hec16e2b_4

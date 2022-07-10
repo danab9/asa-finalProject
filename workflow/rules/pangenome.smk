@@ -10,7 +10,7 @@
 rule pangenome: 
     input:
         genome = "results/genomes/{sample}.fasta",
-        annotation = 
+        annotation = "results/annotations/{sample}_genes.gff"
     output:
         dir = directory("results/pangenome/{sample}"),
         table = "results/pangenome/{sample}.txt",
@@ -23,4 +23,4 @@ rule pangenome:
     conda:
         "../envs/pangenome.yaml"
     shell:
-        """roary -e --mafft -p {threads} –f {output.dir} -cd {params.percentage} {params.extra} *.gff 2> {log}"""  
+        """roary -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} 2> {log}"""  

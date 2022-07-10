@@ -12,7 +12,7 @@ rule quast:
     threads:
         4
     shell:
-        "python quast.py -o results/qc/assembly/{sample} -t {threads} {params.extra} {input} &> {log}"
+        "quast -o results/qc/assembly/{wildcards.sample} -t {threads} {params.extra} {input} &> {log}"
 
 
 rule busco:

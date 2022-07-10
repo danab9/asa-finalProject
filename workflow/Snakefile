@@ -14,16 +14,21 @@ include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
 include: "rules/analysis.smk"
 include: "rules/qc.smk"
+include: "rules/assembly_qc.smk"
+include: "rules/annotation.smk"
+include: "rules/pangenome.smk"
 
 
 
 rule all:
     input: 
-        table =  "results/plasmids/ERR4082859.tsv",
-        # genomes = expand("results/genomes/{sample}.fasta",sample=IDS),
-        # assembly = "results/assembly/ERR4082859/assembly.fasta",
-        # decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
-        # screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
-        # quast = "results/qc/assembly/{sample}/report.txt"
+        #table =  "results/plasmids/ERR4082859.tsv",
+        #genomes = "results/genomes/ERR4082859.fasta",
+        #assembly = "results/assembly/ERR4082859/assembly.fasta",
+        #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
+        #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
+        quast = "results/qc/assembly/ERR4082859/report.txt",
+        #busco = "results/qc/assembly/ERR4082859/busco.txt" if config["busco"]["run"]=='True' else [],
+        #roary = "results/pangenome/ERR4082859.txt"
 
 

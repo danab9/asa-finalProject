@@ -5,7 +5,7 @@ rule assembly:
         long = ((lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' and config["decontamination"] != "True" else"results/fastq/decontaminated/{sample}_2.fq" if config["decontamination"] == "True" else "results/fastq/trimmed/{sample}_2_P.fastq.gz") if config["hybrid_assembly"] == "True" else ""
     output:
         genome = "results/assembly/{sample}/assembly.fasta",
-        dir = "results/assembly/{sample}",
+        dir = directory("results/assembly/{sample}"),
     conda:
         "../envs/assembly.yaml"
     log:

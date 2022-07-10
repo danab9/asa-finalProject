@@ -74,10 +74,15 @@ quast:
 busco:
   run: "False"
   lineage: "" #path to lineage file
+  extra: ""
+  
 rgi:
   extra: ""
 
 blastn:
+  extra: ""
+
+prodigal:
   extra: ""
 
 roary:
