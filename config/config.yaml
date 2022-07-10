@@ -63,9 +63,9 @@ kraken:
   quick: "True" #https://github.com/DerrickWood/kraken2/wiki/Manual
 tree:
   method: "iqtree" #Algorithm used for infering the phylogeny {fasttree,raxml,iqtree}
-  extra: ""
+  extra: "" #https://docs.nextstrain.org/projects/augur/en/latest/usage/cli/tree.html
 quast:
-  extra: ""
+  extra: "" #https://github.com/ablab/quast
 busco_params: #If BUSCO is set to true: if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
   lineage: "bacteria_odb10" # Path to lineage file 
   offline: "False" 
