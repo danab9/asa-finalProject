@@ -7,6 +7,7 @@ contamination_reference:
   short: "resources/references/contamination_short.fasta" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
+blacklist: "resources/blacklist.TODO" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
 
 
 #OPTIONAL STEPS
