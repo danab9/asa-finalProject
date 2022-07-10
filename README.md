@@ -36,7 +36,7 @@ Further **note** that the sample IDs should not contain a slash "\"!
 - **Kraken database**: If screening for either long or short reads is set to true, a Kraken database should be provided. By default this is under the directory `resources/kraken_db`
 - **Trimming short read adapters**: To cut adapter from short Illumina reads, add the path to the adapter fasta file in the configuration file, under trimmomatic, illuminaclip, file. The default path is `resources/adapters/TruSeq3-PE.fa`. Complete the other illuminaclip values as suits your research. 
 See full manual by `trimmomatic` [here](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf).
-- **Lineage database**: TODO for BUSCO --> offline parameter. 
+<!-- - **Lineage database**: TODO for BUSCO : offline parameter.  -->
 
 ## Optional steps
 Each of the optional steps can be set to "True" or "False" to indicate whether the respective step should be performed. 
@@ -47,8 +47,8 @@ Note that by putting on an optional step might require you to provide an additio
 ## Parameters 
 For most steps in the pipeline it is possible to tailor the parameters to your needs, when using different bacterial sequencing data. 
 The parameters can be found under the name of the software used. Some important or compulsorary parameters are explicitly listed under the the toolname, but one can add further optional parameters under `extra`. For each of the tools a link to the user manual with possible optional such parameters is provided. If there are no relevant additional parameters to be set, the option `extra` is not provided in the config file. Please **note** to use correct flags "-", keywords, and allowed argument types, since we do not check for this in the pipeline. Some specific parameters are listed below. 
-- **Phylogenetic method**: TODO
-- **Lineage**: TODO
+- **Phylogenetic method**: Algorithm used for infering the phylogeny {fasttree, raxml, iqtree}. We recommand using fasttree if many samples are provided. 
+- **Lineage**: If specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
 - **Trimming long read adapters**: To add specific adapter to be removed from the start of the read, add `--start_adapt` followed by your adapter sequence to the configuration file, as the extra configuration. 
 For example: `extra = "--start_adapt ACGCTAGCATACGT"`
 For more options, see the full manual by `porechop` [here](https://github.com/rrwick/Porechop).
