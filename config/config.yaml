@@ -69,8 +69,8 @@ quast:
 
 # if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
 busco_params:
-  lineage: "bacteria_odb10"
-  offline: "False" # path to lineage file
+  lineage: "bacteria_odb10" # path to lineage file
+  offline: "False" 
   extra: "" #https://github.com/metashot/busco
   
 
