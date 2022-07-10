@@ -26,8 +26,8 @@ rule all:
         #assembly = "results/assembly/ERR4082859/assembly.fasta",
         #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
         #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
-        quast = "results/qc/assembly/ERR4082859/report.txt",
-        #busco = "results/qc/assembly/ERR4082859/busco.txt" if config["busco"]["run"]=='True' else [],
+        quast = "results/qc/assembly/ERR4082859/quast/report.txt",
+        #busco = "results/qc/assembly/ERR4082859/busco.txt" if config["busco"]=='True' else [],
         #roary = "results/pangenome/ERR4082859.txt"
 
 

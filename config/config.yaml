@@ -71,9 +71,10 @@ tree:
 quast:
   extra: ""
 
-busco:
-  run: "False"
-  lineage: "" #path to lineage file
+# if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
+busco_params:
+  lineage: "bacteria_odb10"
+  offline: "False"
   extra: ""
   
 rgi:

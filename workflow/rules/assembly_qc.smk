@@ -2,7 +2,7 @@ rule quast:
     input:
         "results/assembly/{sample}/assembly.fasta"
     output:
-        "results/qc/assembly/{sample}/report.txt"
+        "results/qc/assembly/{sample}/quast/report.txt"
     log:
         "results/logs/quast/{sample}.log"
     conda:
@@ -19,14 +19,15 @@ rule busco:
     input:
         "results/assembly/{sample}/assembly.fasta"
     output:
-        directory("results/qc/assembly/{sample}"), # TODO: add file according to output
+        dir=directory("results/qc/assembly/{sample}/BUSCO")
     log:
         "results/logs/busco/{sample}.log"
     conda:
         "../envs/busco.yaml"
     params:
-        lineag = config["busco"]["lineage"],
-        extra = config["busco"]["extra"]
+        lineag = config["busco_params"]["lineage"],
+        offline = "--offline" if config["busco_params"]["offline"]=='True' else "",
+        extra = config["busco_params"]["extra"]
     threads: 8
     shell:
-        "busco -i {input} -o {output} -l {params.lineage} -m genome {params.extra} --cpu {threads} &> {log}" 
+        "busco -i {input} -o {output.dir} -l {params.lineage} -m genome {params.offline} {params.extra} --cpu {threads} &> {log}" 
