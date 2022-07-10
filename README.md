@@ -42,7 +42,7 @@ See full manual by `trimmomatic` [here](http://www.usadellab.org/cms/uploads/sup
 Each of the optional steps can be set to "True" or "False" to indicate whether the respective step should be performed. 
 For each of the preprocessing steps (trimming, screening, decontamination and qc) the user can further specify whether the step should be performed. 
 Note that by putting on an optional step might require you to provide an additional directory to a database. 
-<img src="workflow_diagram.png" style=" width:60px ; height:60px " > <img src="prepros.png" style=" width:60px ; height:60px " >
+<img src="workflow_diagram.png" style=" width:40%; " > <img src="prepros.png" style=" width:40%; " >
 
 ## Parameters 
 For most steps in the pipeline it is possible to tailor the parameters to your needs, when using different bacterial sequencing data. 
