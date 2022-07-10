@@ -14,10 +14,9 @@ include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
 include: "rules/analysis.smk"
 include: "rules/qc.smk"
-include: "rules/assembly_qc.smk"
-include: "rules/annotation.smk"
+include: "rules/phylogenetics.smk"
 include: "rules/pangenome.smk"
-
+include: "rules/annotation.smk"
 
 
 rule all:

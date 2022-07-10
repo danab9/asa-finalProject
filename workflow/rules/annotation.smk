@@ -16,3 +16,5 @@ rule prodigal:
         extra = config["prodigal"]["extra"]
     shell:
         "prodigal  -i {input} -o {output} -f gff {params.extra} &> {log}"
+# or Prokka All GFF3 files created by Prokka are valid with Roary and this is the recommended way of generating the input files.
+# 
