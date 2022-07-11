@@ -10,13 +10,13 @@
 
 rule pangenome:  
     input:
-        genome = "results/genomes/{sample}.fasta",
-        annotation = "results/annotations/{sample}_genes.gff"
+        #genome = "results/genomes/{sample}.fasta",
+        annotation = expand("results/annotations/{sample}_genes.gff", sample=IDS)
     output:
-        dir = directory("results/pangenome"),
-        table = "results/pangenome.txt",
+        #dir = directory("results/pangenome"),
+        table = "results/pangenome/{sample}.txt",
     log:
-        "results/logs/pangenome.log"
+        "results/logs/pangenome/{sample}.log"
     threads: 8
     params:
         extra = config["roary"]["extra"],
@@ -24,4 +24,4 @@ rule pangenome:
     conda:
         "../envs/pangenome.yaml"
     shell:
-        """roary -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} 2> {log}"""  
+        """roary -f "results/pangenome/" -o results/pangenome/{wildcards.sample} -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} 2> {log}"""  

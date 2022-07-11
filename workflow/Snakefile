@@ -30,6 +30,6 @@ rule all:
         #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
         quast = "results/qc/assembly/quast/ERR4082859/report.txt",
         busco = "results/qc/assembly/BUSCO/ERR4082859/short_summary.specific." + busco_lin_name + ".ERR4082859.json" if config["busco"]=='True' else [],
-        #roary = "results/pangenome/ERR4082859.txt"
+        roary = "results/pangenome/ERR4082859.txt"
 
 
