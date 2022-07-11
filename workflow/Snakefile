@@ -20,6 +20,14 @@ include: "rules/pangenome.smk"
 include: "rules/annotation.smk"
 include: "rules/assembly_qc.smk"
 
+# if number of samples too small: stop run
+def checkNumberSampels():
+    if len(samples.index) < 2:
+        print("Error: number of samples too small for pan genome analysis. Please provide at least 2 sample! \n Aborting...")
+        return []
+    finally:
+        exit(1)
+
 busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule all:
     input: 
@@ -30,6 +38,6 @@ rule all:
         #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
         quast = "results/qc/assembly/quast/ERR4082859/report.txt",
         busco = "results/qc/assembly/BUSCO/ERR4082859/short_summary.specific." + busco_lin_name + ".ERR4082859.json" if config["busco"]=='True' else [],
-        roary = "results/pangenome/ERR4082859.txt"
+        roary = if len(samples.index)<2 checkNumberSampels else "results/pangenome/ERR4082859.txt"
 
 
