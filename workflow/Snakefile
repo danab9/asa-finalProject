@@ -1,5 +1,6 @@
 configfile : "config/config.yaml"
 import pandas as pd
+import os
 
 samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t')
 IDS = [s for s in list(samples.index)]
@@ -17,8 +18,9 @@ include: "rules/qc.smk"
 include: "rules/phylogenetics.smk"
 include: "rules/pangenome.smk"
 include: "rules/annotation.smk"
+include: "rules/assembly_qc.smk"
 
-
+busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule all:
     input: 
         #table =  "results/plasmids/ERR4082859.tsv",
@@ -26,8 +28,8 @@ rule all:
         #assembly = "results/assembly/ERR4082859/assembly.fasta",
         #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
         #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
-        quast = "results/qc/assembly/ERR4082859/quast/report.txt",
-        #busco = "results/qc/assembly/ERR4082859/busco.txt" if config["busco"]=='True' else [],
+        quast = "results/qc/assembly/quast/ERR4082859/report.txt",
+        busco = "results/qc/assembly/BUSCO/ERR4082859/short_summary.specific." + busco_lin_name + ".ERR4082859.json" if config["busco"]=='True' else [],
         #roary = "results/pangenome/ERR4082859.txt"
 
 

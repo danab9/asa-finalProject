@@ -47,7 +47,8 @@ rule longqc_trimmed:
     input:
         "results/fastq_long/trimmed_ONT/{sample}.fastq.gz"  # make sure trimmed long reads are there 
     output:
-        out_dir = directory("results/qc/trimmed_ONT/{sample}"), # TODO: add file as output
+        out_dir = directory("results/qc/trimmed_ONT/{sample}"),
+        # TODO: add file as output
     conda:
          "../envs/longqc.yaml"
     log: 
