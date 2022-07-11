@@ -1,14 +1,7 @@
-
-# % Roary: https://sanger-pathogens.github.io/Roary/ , https://anaconda.org/bioconda/roary
-# % only seems to use genes. 
-# % `-cd FLOAT percentage of isolates a gene must be in to be core [99]`
-
-# % plus it can make an MAFFT alignment directly:
-# % `-n        fast core gene alignment with MAFFT, use with -e 
-# % -e        create a multiFASTA alignment of core genes using PRANK `
-# sample gff https://github.com/AlgoLab/MALVIRUS-tutorial-data/blob/master/sars-cov-2.gff
-
-rule pangenome:  
+rule pangenome: 
+    """
+    Creates a core genome using roary https://sanger-pathogens.github.io/Roary/, through a multiple sequence alignment.  
+    """
     input:
         #genome = "results/genomes/{sample}.fasta",
         annotation = expand("results/annotations/{sample}_genes.gff", sample=IDS)

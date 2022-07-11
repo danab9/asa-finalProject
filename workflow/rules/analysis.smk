@@ -1,4 +1,8 @@
 rule mlst:
+    """
+    Multi-locus sequence typing using the mlst tool, ran for all samples at once. 
+    Optional: if mlst is set to 'True' in the configuration file. 
+    """ 
     input:
         genomes = expand("results/genomes/{sample}.fasta", sample=IDS)
     output:
@@ -12,6 +16,11 @@ rule mlst:
         "mlst --csv {input.genomes} > {output.table} 2> {log}" 
 
 rule resistance: 
+    """
+    Screens for antibiotic resistance genes in each sample using the CARD database 
+    and the rgi tool, https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
+    Optional: if resistance is set to 'True' in the configuration file. 
+    """ 
     input:
         genome = "results/genomes/{sample}.fasta"
     output:
@@ -26,21 +35,13 @@ rule resistance:
         "../envs/resistance.yaml"
     shell:
         "rgi main -i {input.genome} --output_file {output.dir} {params.extra} --input_type contig -n {threads} 2> {log}" 
-#"rgi {input.genomes} 2> {log}" #genomes/* | 
-#  % conda: rgi https://anaconda.org/bioconda/rgi
-# https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
-# %Alternatively use blast. 
 
-# rule plasmids:
-#     input:
-#         genome = "results/genomes/{sample}.fasta"
-#     output:
-#         plasmids = 
-# % - plsdb https://ccb-microbe.cs.uni-saarland.de/plsdb
-# % conda: https://anaconda.org/ccb-sb/plsdbapi
-# % download from: https://ccb-microbe.cs.uni-saarland.de/plsdb/plasmids/download/plsdb.fna.bz2
 
 rule download_plasmids_db:
+    """
+    Downloads a plasmid reference database from https://ccb-microbe.cs.uni-saarland.de/plsdb
+    in case no database was provided by the user under "plasmids_database" in the configuration file. 
+    """
     output:
         database_sequences = "results/plasmids_database/plsdb.fna" 
     log:
@@ -52,47 +53,36 @@ rule download_plasmids_db:
         """
 
 rule make_plasmids_db:
+    """
+    Makes the downloaded plamid database ready for search with blast 
+    in case no database was provided by the user under "plasmids_database" in the configuration file. 
+    """
     input:
         sequences = "results/plasmids_database/plsdb.fna"
     output:
         database = multiext(
             "results/plasmids_database/plsdb.fna",
-            ".nhr",
-            ".nin",
-            ".nog",
-            ".nsd",
-            ".nsi",
-            ".nsq"
-        )
+            ".nhr",".nin",".nog",".nsd",".nsi",".nsq")
     conda:
         "../envs/virulence.yaml"
     log:
         "results/logs/plasmids/download_database_make.log"
     shell:
-        """
-        makeblastdb -in results/plasmids_database//plsdb.fna -dbtype nucl -parse_seqids -logfile {log}
-        """
+        "makeblastdb -in results/plasmids_database//plsdb.fna -dbtype nucl -parse_seqids -logfile {log}"
 
 rule plasmids:
+    """
+    Screens for plasmids genes in each sample using the PLSD database and blast. 
+    Optional: if plasmids is set to 'True' in the configuration file. 
+    """ 
     input:
         genome = "results/genomes/{sample}.fasta",
         database = multiext(
             "results/plasmids_database/plsdb.fna",
-            ".nhr",
-            ".nin",
-            ".nog",
-            ".nsd",
-            ".nsi",
-            ".nsq"
+            ".nhr",".nin",".nog",".nsd",".nsi",".nsq"
         ) if config["plasmids_database"] == "" else multiext(
             config["plasmids_database"],
-            ".nhr",
-            ".nin",
-            ".nog",
-            ".nsd",
-            ".nsi",
-            ".nsq"
-        ),
+            ".nhr",".nin",".nog",".nsd",".nsi",".nsq"),
         database_sequences = "results/plasmids_database/plsdb.fna"
     output:
         table = "results/plasmids/{sample}.tsv",
@@ -108,8 +98,12 @@ rule plasmids:
 
 
 rule download_virulence_db:
+    """
+    Downloads the virulence factors (VF) DNA core database from http://www.mgc.ac.cn/VFs/download.htm
+    in case no database was provided by the user under "virulence_database" in the configuration file. 
+    """
     output:
-        database_sequences = "results/virulence_database/VFDB_setA_nt.fas" #config["virulence_database"] #
+        database_sequences = "results/virulence_database/VFDB_setA_nt.fas" 
     log:
         "results/logs/virulence/download_database_download.log"
     shell: 
@@ -119,18 +113,16 @@ rule download_virulence_db:
         """
 
 rule make_virulence_db:
+    """
+    Makes the downloaded VF database ready for search with blast 
+    in case no database was provided by the user under "virulence_database" in the configuration file. 
+    """
     input:
         sequences = "results/virulence_database/VFDB_setA_nt.fas"
     output:
         database = multiext(
             "results/virulence_database/VFDB_setA_nt.fas",
-            ".nhr",
-            ".nin",
-            ".nog",
-            ".nsd",
-            ".nsi",
-            ".nsq"
-        )
+            ".nhr",".nin",".nog",".nsd",".nsi",".nsq")
     conda:
         "../envs/virulence.yaml"
     log:
@@ -141,25 +133,18 @@ rule make_virulence_db:
         """
 
 rule virulence:
+    """
+    Screens for virulence factors in each sample using the VF database and blast. 
+    Optional: if virulence is set to 'True' in the configuration file. 
+    """ 
     input:
         genome = "results/genomes/{sample}.fasta",
         database = multiext(
             "results/virulence_database/VFDB_setA_nt.fas",
-            ".nhr",
-            ".nin",
-            ".nog",
-            ".nsd",
-            ".nsi",
-            ".nsq"
-        ) if config["virulence_database"] == "" else multiext(
+            ".nhr",".nin",".nog",".nsd",".nsi",".nsq"
+            ) if config["virulence_database"] == "" else multiext(
             config["virulence_database"],
-            ".nhr",
-            ".nin",
-            ".nog",
-            ".nsd",
-            ".nsi",
-            ".nsq"
-        ),
+            ".nhr",".nin",".nog",".nsd",".nsi",".nsq"),
         database_sequences = "results/virulence_database/VFDB_setA_nt.fas"
     output:
         table = "results/virulence/{sample}.tsv",
@@ -175,20 +160,21 @@ rule virulence:
 
 
 
-
-# blast using wget DNA db from http://www.mgc.ac.cn/VFs/download.htm (why DNA and not protein)
-# PathoFact https://git-r3lab.uni.lu/laura.denies/PathoFact (difficult to use)
-# multiple fastas at ones, by concatanating them in a multi fasta https://www.researchgate.net/post/How_can_I_create_a_local_BLAST_database_using_multiple_FASTA_files
-
-# rule aggregate_tables:
-#     input:
-#         mlst = "results/mlst.tsv" if config["mlst"] == "True" else [],
-# 1 row per sample 
-#         resistance = expand("results/resistance/{sample}.txt",sample=IDS) if config["resistance"] == "True" else [],
-# multiple rows (genes/ORFs) per sample  
-#         plasmids = ,
-#  rows (genes/ORFs) per sample 
-#         virulence = expand("results/virulence/{sample}.tsv",sample=IDS) if config["resistance"] == "True" else [], 
-# multiple rows different hits) per sample 
+rule aggregate_tables:
+    """
+    Aggregates the results from the various analyses steps. 
+    """ 
+    input:
+        mlst = "results/mlst.tsv" if config["mlst"] == "True" else [],
+        #1 row per sample 
+        resistance = expand("results/resistance/{sample}.txt",sample=IDS) if config["resistance"] == "True" else [],
+        #multiple rows (genes/ORFs) per sample  , alternatatively a json file! 
+        plasmids = expand("results/plasmids/{sample}.tsv",sample=IDS) if config["resistance"] == "True" else [],
+        #multiple rows (genes/ORFs) per sample 
+        virulence = expand("results/virulence/{sample}.tsv",sample=IDS) if config["virulence"] == "True" else [], 
+        #multiple rows different hits) per sample, alternative:
+        # multiple fastas at ones, by concatanating them in a multi fasta https://www.researchgate.net/post/How_can_I_create_a_local_BLAST_database_using_multiple_FASTA_files
+    output: 
+        test = "test_aggregate_tables.txt"
 
 

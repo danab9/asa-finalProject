@@ -12,6 +12,9 @@
 #         "python3 -m augur align --sequences {input.sequences} -o {output.alignment} --threads {threads} &> {log}"
 
 rule tree:
+    """
+    Creates a phylogenetic tree using the augur software of nextstrain. The method can be set in the configuration file.
+    """
     input:
         alignment = "results/msa/alignment.fasta"
     output:
@@ -28,6 +31,9 @@ rule tree:
         "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --threads {threads} &> {log}"
 
 rule visualize_tree:
+    """
+    Visualizes the newick format of the phylogenetic tree using a python script. 
+    """
     input:
         tree = "results/tree/tree.nwk"
     output:

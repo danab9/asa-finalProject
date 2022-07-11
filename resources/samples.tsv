@@ -1,4 +1,3 @@
 sample	fq1	fq2	ONT
-ERR4082859	resources/fastq/ERR4082859_1.fastq.gz	resources/fastq/ERR4082859_2.fastq.gz	resources/fastq/ERR4082859_ONT.fastq
-ERR4082860	resources/fastq/ERR4082860_1.fastq.gz	resources/fastq/ERR4082860_2.fastq.gz	resources/fastq/ERR4082860_ONT.fastq
-ERR4082863	resources/fastq/ERR4082863_1.fastq.gz	resources/fastq/ERR4082863_2.fastq.gz	resources/fastq/ERR4082863_ONT.fastq
+sample1	/buffer/ag_bsc/PS_SEQAN_DATA/FINAL_PROJECT/SET1/sample1_Illumina_MiSeq_paired_end_sequencing_1.fastq.gz	/buffer/ag_bsc/PS_SEQAN_DATA/FINAL_PROJECT/SET1/sample1_Illumina_MiSeq_paired_end_sequencing_2.fastq.gz	/buffer/ag_bsc/PS_SEQAN_DATA/FINAL_PROJECT/SET1/sample1_MinION_sequencing.fastq.gz
+sample2	/buffer/ag_bsc/PS_SEQAN_DATA/FINAL_PROJECT/SET1/sample1_Illumina_MiSeq_paired_end_sequencing_2.fastq.gz	/buffer/ag_bsc/PS_SEQAN_DATA/FINAL_PROJECT/SET1/sample2_Illumina_MiSeq_paired_end_sequencing_2.fastq.gz	/buffer/ag_bsc/PS_SEQAN_DATA/FINAL_PROJECT/SET1/sample2_MinION_sequencing.fastq.gz

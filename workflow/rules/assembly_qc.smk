@@ -1,4 +1,7 @@
 rule quast:
+    """
+    Quality Control of the assembled genomes using QUAST. 
+    """
     input:
         "results/assembly/{sample}/assembly.fasta"
     output:
@@ -16,6 +19,10 @@ rule quast:
 
 busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule busco:
+    """
+    Quality Control of the assembled genomes using BUSCO.
+    Optional: If busco is set to 'True' in the configuration file.  
+    """ #TODO: explain the params 
     input:
         "results/assembly/{sample}/assembly.fasta"
     output:
