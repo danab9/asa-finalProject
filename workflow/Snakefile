@@ -1,7 +1,7 @@
 configfile : "config/config.yaml"
 import pandas as pd
 import os
-samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t')
+samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t') # Use print(samples) to check if the tsv has the right format. 
 IDS = [sample for sample in list(samples.index)]
 wildcard_constraints:
     sample = "[^/]+" # Defines that a "/" is not allowed in sample names as was stated in the README.  

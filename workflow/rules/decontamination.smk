@@ -3,8 +3,8 @@ rule short_kraken:
 
     """ #TODO: add comments 
     input:
-        r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_1_P.fastq.gz",
-        r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_2_P.fastq.gz"
+        r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
+        r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz"
     output:
         clasified_reads_1 = "results/fastq/kraken/{sample}_1.fq",
         clasified_reads_2 = "results/fastq/kraken/{sample}_2.fq",
@@ -22,7 +22,7 @@ rule short_kraken:
 
 rule long_kraken: 
     input:
-        long=(lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/{sample}_long.fastq.gz",
+        long=(lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/short/{sample}_long.fastq.gz",
     output:
         clasified_reads = "results/fastq/kraken/{sample}_long.fq",
         report = "results/report/kraken/long/{sample}.txt"
@@ -93,9 +93,9 @@ rule short_bowtie_map_contaminations:
             ".rev.1.bt2",
             ".rev.2.bt2"),
         r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1'])
-                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_1_P.fastq.gz",
+                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
         r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2'])
-                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_2_P.fastq.gz"
+                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz"
     output:
         "results/sam_contaminations/{sample}.sam"
     log:
@@ -147,7 +147,7 @@ rule long_sam_to_fastq:
 rule long_decontamination:
     input:
         reference = config["contamination_reference"]["long"],
-        long = "results/fastq/trimmed/{sample}_1_P.fastq.gz" if config["trimming"]["long"]=='True' else (lambda wildcards: samples.at[wildcards.sample, 'ONT']),
+        long = "results/fastq/trimmed/long/{sample}_1_P.fastq.gz" if config["trimming"]["long"]=='True' else (lambda wildcards: samples.at[wildcards.sample, 'ONT']),
     output:
         bam = "results/bam_decontaminated/long/{sample}.bam"
     log:

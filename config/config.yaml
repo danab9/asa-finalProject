@@ -14,7 +14,7 @@ blacklist: "resources/blacklist.TODO" #A blacklist can optionally be provided to
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
 trimming: 
-  long: 'True'
+  long: 'False'
   short: 'True'
 screening: 
   long: 'True'

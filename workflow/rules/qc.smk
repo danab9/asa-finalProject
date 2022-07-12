@@ -21,7 +21,7 @@ rule fastqc_trimmed:
     Optional: if qc:short and trimming:short are set to 'True' in the configuration file. 
     """
     input:
-        "results/fastq/trimmed/{sample}_{number}_{paired}.fastq.gz"
+        trimmed="results/fastq/trimmed/short/{sample}_{number}_{paired}.fastq.gz"
     output:
         html="results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",
         zip="results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.zip"
@@ -30,7 +30,7 @@ rule fastqc_trimmed:
     log:
         "results/logs/qc/trimmed/{sample}_{number}_{paired}.log"
     shell:
-        "fastqc {input} -o results/qc/trimmed &> {log}"
+        "fastqc {input.trimmed} -o results/qc/trimmed &> {log}"
 
 rule longqc_untrimmed:
     """
@@ -57,9 +57,9 @@ rule longqc_trimmed:
     Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
     """
     input:
-        "results/fastq_long/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
+        "results/fastq/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
     output:
-        out_dir = directory("results/qc/trimmed/long/{sample}"),
+        file = "results/qc/trimmed/long/{sample}.html"
         # TODO: add file as output
     conda:
          "../envs/longqc.yaml"
@@ -67,10 +67,11 @@ rule longqc_trimmed:
         "results/logs/qc/trimmed/long/longqc/{sample}_trimmed.log"
     params:
         preset = config["longqc"]["preset"],
-        extra = config["longqc"]["extra"]
+        extra = config["longqc"]["extra"],
+        out_dir = directory("results/qc/trimmed/long/{sample}"),
     threads: 4 
     shell:
-        "python longQC.py sampleqc -x {params.preset} {params.extra} -o {output.out_dir} -p {threads} {input.fq} &> {log}"
+        "python longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}"
     
     
 rule trimmomatic:
@@ -124,7 +125,7 @@ rule multiqc:
     Optional: if qc:short or qc:long is set to 'True' in the configuration file. 
     """
     input:
-        fqc=expand("results/qc/fastq/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']),
+        fqc=expand("results/qc/fastq/fastqc/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']),
         tqc=expand("results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P', 'UP'])
             if config['qc']['short'] != 'False' and config['trimming']['short'] != 'False' else [],
         longqc=expand("results/qc/trimmed/long/{sample}.html", sample=IDS) 
