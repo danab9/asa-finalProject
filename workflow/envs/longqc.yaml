@@ -2,5 +2,7 @@ name: longqc
 channels:
   - bioconda
   - conda-forge
+  - defaults
+  - r
 dependencies:
-  - longqc=1.2.0c
+  - longqc=1.2.0c=hdfd78af_0

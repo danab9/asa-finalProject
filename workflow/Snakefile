@@ -25,8 +25,6 @@ def checkNumberSampels():
     if len(samples.index) < 2:
         print("Error: number of samples too small for pan genome analysis. Please provide at least 2 sample! \n Aborting...")
         return []
-    finally:
-        exit(1)
 
 busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule all:
