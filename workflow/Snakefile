@@ -1,15 +1,10 @@
 configfile : "config/config.yaml"
 import pandas as pd
 import os
-
-samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t')
-IDS = [s for s in list(samples.index)]
-#short_samples = pd.read_csv(config["samples"]["short_reads"],index_col="sample", sep ='\t')
-#IDs = [s for s in list(short_samples.index)]
-#long_samples = pd.read_csv(config["samples"]["long_reads"],index_col="sample", sep ='\t')
-
+samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t') # Use print(samples) to check if the tsv has the right format. 
+IDS = [sample for sample in list(samples.index)]
 wildcard_constraints:
-    sample = config["regular_expression"]
+    sample = "[^/]+" # Defines that a "/" is not allowed in sample names as was stated in the README.  
 
 include: "rules/assembly.smk"
 include: "rules/decontamination.smk"
@@ -20,22 +15,27 @@ include: "rules/pangenome.smk"
 include: "rules/annotation.smk"
 include: "rules/assembly_qc.smk"
 
-# if number of samples too small: stop run
-def checkNumberSampels():
-    if len(samples.index) < 2:
-        print("Error: number of samples too small for pan genome analysis. Please provide at least 2 sample! \n Aborting...")
-        return []
+# # if number of samples too small: stop run
+# def checkNumberSampels():
+#     if len(samples.index) < 2:
+#         print("Error: number of samples too small for pan genome analysis. Please provide at least 2 sample! \n Aborting...")
+#         return []
+#     
 
 busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule all:
     input: 
-        #table =  "results/plasmids/ERR4082859.tsv",
-        #genomes = "results/genomes/ERR4082859.fasta",
-        #assembly = "results/assembly/ERR4082859/assembly.fasta",
+        genomes = expand("results/genomes/{sample}.fasta", sample = IDS), # Generates the genomes for all samples through (hybrid) assembly. 
+        qc_preprocessing = "results/qc/multiqc_report.html" if (config["qc"]["short"] == "True" or config["qc"]["long"] == "True") else [],  # Generates an aggregated report for the quality control done during preprocessing if qc:long or qc:short is set to true. 
+        qc_screening = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [], # Generates a screening report during preprocessing if screening:long or screening:short is set to true. 
+        #qc_assembly = # Generates aggregated tables of the QUAST and optionally the BUSCO metrics for the assembled genomes. 
+        
+        #TEMPORARY INPUTS 
         #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
-        #screen = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [],
-        quast = "results/qc/assembly/quast/ERR4082859/report.txt",
-        busco = "results/qc/assembly/BUSCO/ERR4082859/short_summary.specific." + busco_lin_name + ".ERR4082859.json" if config["busco"]=='True' else [],
-        roary = if len(samples.index)<2 checkNumberSampels else "results/pangenome/ERR4082859.txt"
+        quast = "results/qc/assembly/quast/sample1/report.txt",
+        busco = "results/qc/assembly/BUSCO/sample1/short_summary.specific." + busco_lin_name + ".sample1.json" if config["busco"]=='True' else [],
+        #roary = if len(samples.index) <2 checkNumberSampels else "results/pangenome/sample1.txt"
+        roary = "results/pangenome/sample1.txt",
+        test = "test_aggregate_tables.txt"
 
-
+        

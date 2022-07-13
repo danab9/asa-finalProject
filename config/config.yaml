@@ -1,7 +1,6 @@
 #DIRECTORIES 
 #-----------------
 samples: "resources/samples.tsv"
-regular_expression: "[^/]+" #Defines that a "/" is not allowed in sample names, as was stated in the README  --> TODO, move to snakefile! 
 contamination_reference:
   long: "resources/references/contamination_long.fasta" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
   short: "resources/references/contamination_short.fasta" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
@@ -16,16 +15,16 @@ blacklist: "resources/blacklist.TODO" #A blacklist can optionally be provided to
 #Preprocessing 
 trimming: 
   long: 'False'
-  short: 'False'
+  short: 'True'
 screening: 
-  long: 'False'
-  short: 'False'   
+  long: 'True'
+  short: 'True'   
 decontamination: 
   long: "True"
   short: "True"
 qc:
-  long: 'False'
-  short: 'False'
+  long: 'True'
+  short: 'True'
 #Assembly 
 hybrid_assembly: "True" 
 busco: "True"
@@ -41,16 +40,16 @@ plasmids: 'False'
 #Paremeters. Set to the default used in our pipeline. 
 #In extra any string can be provided.  A link is given to the manual of the respective tool. 
 fastqc:
-  extra: "" #https://hbctraining.github.io/Intro-to-rnaseq-hpc-salmon-flipped/lessons/06_qc_running_fastqc_sbatch.html
+  extra: ""                                     #https://hbctraining.github.io/Intro-to-rnaseq-hpc-salmon-flipped/lessons/06_qc_running_fastqc_sbatch.html
 longqc: 
-  preset: ont-rapid  #Specifies a platform/kit to be evaluated {pb-rs2, pb-sequel, ont-ligation, ont-rapid, ont-1dsq}
-  extra: "" #https://github.com/yfukasawa/LongQC
+  preset: ont-rapid                             #Specifies a platform/kit to be evaluated {pb-rs2, pb-sequel, ont-ligation, ont-rapid, ont-1dsq}
+  extra: ""                                     #https://github.com/yfukasawa/LongQC
 multiqc:
-  extra: "" #https://github.com/ewels/MultiQC
+  extra: ""                                     #https://github.com/ewels/MultiQC
 trimmomatic:
-  trailing: 20 #Specifies the minimum quality required to keep a base.
+  trailing: 20                                  #Specifies the minimum quality required to keep a base.
   illuminaclip:
-    file: "resources/adapters/TruSeq3-PE.fa" #Path to the adapters, should be provided if trimming for short reads is set to true. 
+    file: "resources/adapters/TruSeq3-PE.fa"    #Path to the adapters, should be provided if trimming for short reads is set to true. 
     seedMissmatches: '2' #Specifies the maximum mismatch count which will still allow a full match to be performed
     palindromeClipThreshold: '30' #Specifies how accurate the match between the two 'adapter ligated' reads must be for PE palindrome read alignment.
     simpleClipThreshold: '10' #Specifies how accurate the match between any adapter etc. sequence must be against a read.

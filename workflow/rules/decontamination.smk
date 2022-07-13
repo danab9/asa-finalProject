@@ -1,7 +1,10 @@
 rule short_kraken: 
+    """
+
+    """ #TODO: add comments 
     input:
-        r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_1_P.fastq.gz",
-        r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_2_P.fastq.gz"
+        r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
+        r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz"
     output:
         clasified_reads_1 = "results/fastq/kraken/{sample}_1.fq",
         clasified_reads_2 = "results/fastq/kraken/{sample}_2.fq",
@@ -19,7 +22,7 @@ rule short_kraken:
 
 rule long_kraken: 
     input:
-        long=(lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/{sample}_long.fastq.gz",
+        long=(lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/short/{sample}_long.fastq.gz",
     output:
         clasified_reads = "results/fastq/kraken/{sample}_long.fq",
         report = "results/report/kraken/long/{sample}.txt"
@@ -90,9 +93,9 @@ rule short_bowtie_map_contaminations:
             ".rev.1.bt2",
             ".rev.2.bt2"),
         r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1'])
-                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_1_P.fastq.gz",
+                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
         r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2'])
-                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/{sample}_2_P.fastq.gz"
+                if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz"
     output:
         "results/sam_contaminations/{sample}.sam"
     log:
@@ -144,7 +147,7 @@ rule long_sam_to_fastq:
 rule long_decontamination:
     input:
         reference = config["contamination_reference"]["long"],
-        long = "results/fastq/trimmed/{sample}_1_P.fastq.gz" if config["trimming"]["long"]=='True' else (lambda wildcards: samples.at[wildcards.sample, 'ONT']),
+        long = "results/fastq/trimmed/long/{sample}_1_P.fastq.gz" if config["trimming"]["long"]=='True' else (lambda wildcards: samples.at[wildcards.sample, 'ONT']),
     output:
         bam = "results/bam_decontaminated/long/{sample}.bam"
     log:
@@ -154,35 +157,3 @@ rule long_decontamination:
         "../envs/decontamination.yaml"
     shell:
         "minimap2 -t {threads} -a {input.reference} {input.long} 2> {log} | samtools view -b - > {output.bam} 2> {log}"
-
-# rule long_decontamination_2:
-#     input:
-#         "results/references/artificial/bam/{sample}.bam"
-#     output:
-#         "results/references/artificial/bam_sorted/{sample}.bam"
-#     log:
-#         "results/logs/samtools/artificial/{sample}_sort.log"
-#     threads: 4
-#     conda:
-#         "../envs/decontamination.yaml"
-#     shell:
-#         "samtools sort {input} -o {output} --threads {threads} &> {log}"
-
-# rule long_decontamination_3:
-#     input:
-#         best_reference = "results/references/best_references/{sample}.fasta",
-#         bam_sorted = "results/references/artificial/bam_sorted/{sample}.bam"
-#     output:
-#         consensus = "results/fastq/decontaminated/long/{sample}.fq"
-#     log:
-#         "results/logs/bcsf/{sample}.log"
-#     threads: 1
-#     conda:
-#         "../envs/decontamination.yaml"
-#     shell:
-#         """
-#         bcftools mpileup -B -Ou -f {input.best_reference} {input.bam_sorted} | bcftools call -mv -M -Oz -o results/{wildcards.sample}_calls.vcf.gz 2> {log}
-#         bcftools index results/{wildcards.sample}_calls.vcf.gz -f 2> {log}
-#         cat {input.best_reference} | bcftools consensus results/{wildcards.sample}_calls.vcf.gz > {output.consensus} 2> {log}
-#         """
-
