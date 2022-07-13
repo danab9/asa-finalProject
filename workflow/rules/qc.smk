@@ -32,46 +32,63 @@ rule fastqc_trimmed:
     shell:
         "fastqc {input.trimmed} -o results/qc/trimmed &> {log}"
 
-rule longqc_untrimmed:
+rule fastqc_long:
     """
-    Quality Control using LongQC for long reads
+    Quality Control using FastQC for ONTreads
     Optional: if qc:long is set to 'True' in the configuration file. 
     """
     input:
         fq = lambda wildcards: samples.at[wildcards.sample, 'ONT']
     output:
-        out_dir = directory("results/qc/longqc/{sample}")
+        html= "results/qc/fastq/fastqc/{sample}_fastqc.html",
+        zip= "results/qc/fastq/fastqc/{sample}_fastqc.zip"
     conda:
-        "../envs/longqc.yaml"
-    log: 
-        "results/logs/qc/untrimmed/longqc/{sample}.log"
-    params:
-        preset = config["longqc"]["preset"],
-        extra = config["longqc"]["extra"]
+        "../envs/qc.yaml"
+    log:
+        "results/logs/qc/untrimmed/fastqc/{sample}_ONT.log"
     shell:
-        "python longQC.py sampleqc -x {params.preset} {params.extra} -o {output.out_dir}  -p {threads} {input.fq} &> {log}"
+        "fastqc {input.fq} -o results/qc/fastq &> {log}"
+    
+# rule longqc_untrimmed:
+#     """
+#     Quality Control using LongQC for long reads
+#     Optional: if qc:long is set to 'True' in the configuration file. 
+#     """
+#     input:
+#         fq = lambda wildcards: samples.at[wildcards.sample, 'ONT']
+#     output:
+#         out_dir = directory("results/qc/longqc/{sample}")
+#     conda:
+#         "../envs/longqc.yaml"
+#     log: 
+#         "results/logs/qc/untrimmed/longqc/{sample}.log"
+#     params:
+#         preset = config["longqc"]["preset"],
+#         extra = config["longqc"]["extra"]
+#     shell:
+#         "python longQC.py sampleqc -x {params.preset} {params.extra} -o {output.out_dir}  -p {threads} {input.fq} &> {log}"
 
-rule longqc_trimmed:
-    """
-    Quality Control using LongQC for trimmed long reads
-    Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
-    """
-    input:
-        "results/fastq/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
-    output:
-        file = "results/qc/trimmed/long/{sample}.html"
-        # TODO: add file as output
-    conda:
-         "../envs/longqc.yaml"
-    log: 
-        "results/logs/qc/trimmed/long/longqc/{sample}_trimmed.log"
-    params:
-        preset = config["longqc"]["preset"],
-        extra = config["longqc"]["extra"],
-        out_dir = directory("results/qc/trimmed/long/{sample}"),
-    threads: 4 
-    shell:
-        "python longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}"
+# rule longqc_trimmed:
+#     """
+#     Quality Control using LongQC for trimmed long reads
+#     Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
+#     """
+#     input:
+#         "results/fastq/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
+#     output:
+#         file = "results/qc/trimmed/long/{sample}.html"
+#         # TODO: add file as output
+#     conda:
+#          "../envs/longqc.yaml"
+#     log: 
+#         "results/logs/qc/trimmed/long/longqc/{sample}_trimmed.log"
+#     params:
+#         preset = config["longqc"]["preset"],
+#         extra = config["longqc"]["extra"],
+#         out_dir = directory("results/qc/trimmed/long/{sample}"),
+#     threads: 4 
+#     shell:
+#         "python longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}"
     
     
 rule trimmomatic:
@@ -128,7 +145,7 @@ rule multiqc:
         fqc=expand("results/qc/fastq/fastqc/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']),
         tqc=expand("results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P', 'UP'])
             if config['qc']['short'] != 'False' and config['trimming']['short'] != 'False' else [],
-        longqc=expand("results/qc/trimmed/long/{sample}.html", sample=IDS) 
+        longqc=expand("results/qc/fastq/fastqc/{sample}_fastqc.html", sample=samples.at[wildcards.sample], 'ONT') # TODO: sample ONT wildcard?
             if config["qc"]["long"] != 'False' and config['trimming']['long'] != 'False' else [] # TODO: check if correct format
     output:
         "results/qc/multiqc_report.html"
