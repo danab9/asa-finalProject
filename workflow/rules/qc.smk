@@ -58,40 +58,39 @@ rule longqc_untrimmed:
         fq = lambda wildcards: samples.at[wildcards.sample, 'ONT'],
         touch_file="results/make_longqc.done"
     output:
-        out_dir = directory("results/qc/longqc/{sample}"),
-        html = "results/qc/longqc/{sample}/web_summary.html"
+        html = "results/qc/longqc/untrimmed/{sample}/web_summary.html"
     conda:
         "../envs/longqc.yaml"
     log: 
         "results/logs/qc/untrimmed/longqc/{sample}.log"
+    threads: 8
     params:
         preset = config["longqc"]["preset"],
-        extra = config["longqc"]["extra"]
+        extra = config["longqc"]["extra"],
+        out_dir = directory("results/qc/longqc/untrimmed/{sample}"),
+    shell:
+        "python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}" #
+
+rule longqc_trimmed:
+    """
+    Quality Control using LongQC for trimmed long reads
+    Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
+    """
+    input:
+        "results/fastq/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
+    output:
+        html = "results/qc/longqc/trimmed/{sample}/web_summary.html"
+    conda:
+         "../envs/longqc.yaml"
+    log: 
+        "results/logs/qc/trimmed/long/longqc/{sample}_trimmed.log"
+    params:
+        preset = config["longqc"]["preset"],
+        extra = config["longqc"]["extra"],
+        out_dir =  directory("results/qc/longqc/trimmed/{sample}"), #directory("results/qc/trimmed/long/{sample}"),
     threads: 8
     shell:
-        "python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {output.out_dir}  -p {threads} {input.fq} &> {log}"
-
-# rule longqc_trimmed:
-#     """
-#     Quality Control using LongQC for trimmed long reads
-#     Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
-#     """
-#     input:
-#         "results/fastq/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
-#     output:
-#         out_dir = directory("results/qc/longqc/{sample}"),
-#         html = "results/qc/longqc/{sample}/web_summary.html"
-#     conda:
-#          "../envs/longqc.yaml"
-#     log: 
-#         "results/logs/qc/trimmed/long/longqc/{sample}_trimmed.log"
-#     params:
-#         preset = config["longqc"]["preset"],
-#         extra = config["longqc"]["extra"],
-#         out_dir = directory("results/qc/trimmed/long/{sample}"),
-#     threads: 8
-#     shell:
-#         "python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}"
+        "python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}"
     
     
 rule trimmomatic:

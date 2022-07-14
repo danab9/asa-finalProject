@@ -8,3 +8,4 @@ config.yaml
 results/
 resources/kraken_db
 .snakemake/
+headers.txt
