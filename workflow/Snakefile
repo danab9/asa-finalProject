@@ -31,7 +31,7 @@ rule all:
         # qc_screening = "results/report/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [], # Generates a screening report during preprocessing if screening:long or screening:short is set to true. 
         #qc_assembly = # Generates aggregated tables of the QUAST and optionally the BUSCO metrics for the assembled genomes. 
         # longqc:
-        longqc_untrimmed = expand("results/qc/longqc/{sample}_longqc.html", sample=IDS),  # still not working
+        longqc_untrimmed = expand("results/qc/longqc/{sample}/web_summary.html", sample=IDS),  # still not working
         #TEMPORARY INPUTS 
         # #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
         # quast = "results/qc/assembly/quast/sample1/report.txt",
