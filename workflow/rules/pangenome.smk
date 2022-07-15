@@ -17,5 +17,6 @@ rule pangenome:
     conda:
         "../envs/pangenome.yaml"
     shell:
-        """roary -f "results/pangenome/" -o results/pangenome/ -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} &> {log}"""  
+        """roary -f "results/pangenome/"  -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} &> {log}"""  
 #removed {wildcards.sample}  from -o. 
+#-o results/pangenome/
