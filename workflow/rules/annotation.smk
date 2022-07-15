@@ -19,6 +19,9 @@
 
 
 rule prokka:
+    """
+    Generates gene annotation in a .GFF format for each sample using prokka - https://github.com/tseemann/prokka
+    """
     input:
         genome = "results/genomes/{sample}.fasta"
     output:
@@ -30,7 +33,7 @@ rule prokka:
     threads:
         8 
     params:
-        extra = config["prodigal"]["extra"],
+        extra = config["prokka"]["extra"],
         dir = directory("results/annotations/")
-    shell:  # using '--force' because snakemkae automatically creates the output directory prior to the run. 
+    shell:  # using '--force' because snakemkae automatically creates the output directory prior to the run, which gives an error 
         "prokka --outdir {params.dir} --prefix {wildcards.sample}_genes --force {params.extra} {input.genome} &> {log}"

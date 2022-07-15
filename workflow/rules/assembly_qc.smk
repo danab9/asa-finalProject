@@ -3,9 +3,9 @@ rule quast:
     Quality Control of the assembled genomes using QUAST. 
     """
     input:
-        "results/assembly/{sample}/assembly.fasta"
+        assembly="results/assembly/{sample}/assembly.fasta"
     output:
-        "results/qc/assembly/quast/{sample}/report.txt"
+        report="results/qc/assembly/quast/{sample}/report.txt"
     log:
         "results/logs/quast/{sample}.log"
     conda:
@@ -13,9 +13,9 @@ rule quast:
     params:
         extra = config['quast']['extra']
     threads:
-        4
+        8
     shell:
-        "quast -o results/qc/assembly/quast/{wildcards.sample} -t {threads} {params.extra} {input} &> {log}"
+        "quast -o results/qc/assembly/quast/{wildcards.sample} -t {threads} {params.extra} {input.assembly} &> {log}"
 
 busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule busco:
@@ -24,7 +24,7 @@ rule busco:
     Optional: If busco is set to 'True' in the configuration file.  
     """ #TODO: explain the params 
     input:
-        "results/assembly/{sample}/assembly.fasta"
+        assembly="results/assembly/{sample}/assembly.fasta"
     output:
         #dir=directory("results/qc/assembly/BUSCO/"),
         file = "results/qc/assembly/BUSCO/{sample}/short_summary.specific." + busco_lin_name + ".{sample}.json"
@@ -33,9 +33,28 @@ rule busco:
     conda:
         "../envs/busco.yaml"
     params:
-        lineage = config["busco_params"]["lineage"],
-        offline = "--offline" if config["busco_params"]["offline"]=='True' else "",
+        lineage = config["busco_params"]["lineage"], # path to lineage / name of lineage dataset of BUSCO
+        offline = "--offline" if config["busco_params"]["offline"]=='True' else "",  # offline=True prevents BUSCO from searching online
         extra = config["busco_params"]["extra"]
     threads: 8
     shell:
-        "busco -i {input} -o {wildcards.sample} --out_path results/qc/assembly/BUSCO/ -l {params.lineage} -m genome {params.offline} {params.extra} --cpu {threads} -f &> {log}" 
+        "busco -i {input.assembly} -o {wildcards.sample} --out_path results/qc/assembly/BUSCO/ -l {params.lineage} -m genome {params.offline} {params.extra} --cpu {threads} -f &> {log}"
+
+
+rule multiqc_assembly:
+    """
+    Accumulation of Quality Control BUSCO and Quast reports of the assembly
+    """
+    input:
+        quast = expand("results/qc/assembly/quast/{sample}/report.txt", sample=IDS),
+        busco = expand("results/qc/assembly/BUSCO/{sample}/short_summary.specific." + busco_lin_name + ".{sample}.json", sample=IDS)
+    output:
+        report = "results/qc/assembly/multiqc_report.html"
+    log:
+        "results/logs/assembly_multiqc.log"
+    conda:
+        "../envs/multiqc.yaml"
+    params:
+        extra=config["multiqc"]["extra"]
+    shell:
+        "multiqc results/qc/assembly {params.extra} -o results/qc/assembly &> {log}" 
