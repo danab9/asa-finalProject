@@ -4,16 +4,22 @@ rule fastqc_untrimmed:
     Optional: if qc:short is set to 'True' in the configuration file. 
     """
     input:
-        fq = lambda wildcards: samples.at[wildcards.sample, 'fq'+ wildcards.number]
+        fq = lambda wildcards: samples.at[wildcards.sample, 'fq' + wildcards.number]
     output:
-        html= "results/qc/fastq/fastqc/{sample}_{number}_fastqc.html",
-        zip= "results/qc/fastq/fastqc/{sample}_{number}_fastqc.zip"
+        # html= "results/qc/untrimmed/short/{sample}_{number}_fastqc.html",
+        # zip= "results/qc/untrimmed/short/{sample}_{number}_fastqc.zip"
+        # Since we don't know the basename we create a touch file that triggers multiQC
+        #dir = directory("results/qc/untrimmed/short"),
+        touch_file = temp(touch("results/logs/qc/untrimmed/short/{sample}_{number}.done")),
     conda:
         "../envs/qc.yaml"
     log:
-        "results/logs/qc/untrimmed/fastqc/{sample}_{number}.log"
+        "results/logs/qc/untrimmed/short/{sample}_{number}.log" #"results/logs/qc/untrimmed/short/{sample}_{number}.log"
     shell:
-        "fastqc {input.fq} -o results/qc/fastq &> {log}"
+        """ 
+        mkdir -p results/qc/untrimmed/short/
+        fastqc {input.fq} -o results/qc/untrimmed/short &> {log}
+        """ 
 
 rule fastqc_trimmed:
     """
@@ -28,9 +34,9 @@ rule fastqc_trimmed:
     conda:
         "../envs/qc.yaml"
     log:
-        "results/logs/qc/trimmed/{sample}_{number}_{paired}.log"
+        "results/logs/qc/trimmed/short/{sample}_{number}_{paired}.log"
     shell:
-        "fastqc {input.trimmed} -o results/qc/trimmed &> {log}"
+        "fastqc {input.trimmed} -o results/qc/trimmed/short &> {log}"
 
 # rule fastqc_long:
 #     """
@@ -56,20 +62,23 @@ rule longqc_untrimmed:
     """
     input:
         fq = lambda wildcards: samples.at[wildcards.sample, 'ONT'],
-        touch_file="results/make_longqc.done"
+        touch_file="results/installations/make_longqc.done", #triggers the installation of longQC. 
     output:
-        html = "results/qc/longqc/untrimmed/{sample}/web_summary.html"
+        html = "results/qc/untrimmed/long/{sample}/web_summary.html"
     conda:
         "../envs/longqc.yaml"
     log: 
-        "results/logs/qc/untrimmed/longqc/{sample}.log"
+        "results/logs/qc/untrimmed/long/{sample}.log"
     threads: 8
     params:
         preset = config["longqc"]["preset"],
         extra = config["longqc"]["extra"],
-        out_dir = directory("results/qc/longqc/untrimmed/{sample}"),
+        out_dir = "results/qc/untrimmed/long/{sample}",
     shell:
-        "python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}" #
+        """ 
+        rm -f -r {params.out_dir}
+        python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}
+        """ # Existing folder should be removed to prevent LongQC from throwing errors. 
 
 rule longqc_trimmed:
     """
@@ -77,20 +86,23 @@ rule longqc_trimmed:
     Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
     """
     input:
-        "results/fastq/trimmed/long/{sample}.fastq.gz"  # make sure trimmed long reads are there 
+        trimmed_read = "results/fastq/trimmed/long/{sample}.fastq.gz"  
     output:
-        html = "results/qc/longqc/trimmed/{sample}/web_summary.html"
+        html = "results/qc/trimmed/long/{sample}/web_summary.html"
     conda:
          "../envs/longqc.yaml"
     log: 
-        "results/logs/qc/trimmed/long/longqc/{sample}_trimmed.log"
+        "results/logs/qc/trimmed/long/{sample}_trimmed.log"
     params:
         preset = config["longqc"]["preset"],
         extra = config["longqc"]["extra"],
-        out_dir =  directory("results/qc/longqc/trimmed/{sample}"), #directory("results/qc/trimmed/long/{sample}"),
+        out_dir = "results/qc/trimmed/long/{sample}",
     threads: 8
     shell:
-        "python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.fq} &> {log}"
+        """
+        rm -f -r {params.out_dir}
+        python results/installations/LongQC/longQC.py sampleqc -x {params.preset} {params.extra} -o {params.out_dir} -p {threads} {input.trimmed_read} &> {log}
+        """
     
     
 rule trimmomatic:
@@ -144,11 +156,14 @@ rule multiqc:
     Optional: if qc:short or qc:long is set to 'True' in the configuration file. 
     """
     input:
-        fqc=expand("results/qc/fastq/fastqc/{sample}_{number}_fastqc.html",sample=IDS,number=['1', '2']),
-        tqc=expand("results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P', 'UP'])
-            if config['qc']['short'] != 'False' and config['trimming']['short'] != 'False' else [],
-        #longqc=expand("results/qc/fastq/fastqc/{sample}_fastqc.html", sample=IDS) # TODO: sample ONT wildcard?
-        #    if config["qc"]["long"] != 'False' and config['trimming']['long'] != 'False' else [] # TODO: check if correct format
+        untrimmed_short_touch_file = expand("results/logs/qc/untrimmed/short/{sample}_{number}.done", sample=IDS,number=['1', '2']) 
+            if config["qc"]["short"] =="True" else [],
+        trimmed_short=expand("results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P'])
+            if config['qc']['short'] == 'True' and config['trimming']['short'] == 'True' else [], #Unpaired samples for read 2 result don't exist. Since we are also not involved in the later analysis. 
+        untrimmed_long = expand("results/qc/untrimmed/long/{sample}/web_summary.html", sample=IDS) 
+            if config["qc"]["long"] =="True" else [],
+        trimmed_long = expand("results/qc/trimmed/long/{sample}/web_summary.html", sample=IDS) 
+            if config["qc"]["long"] =="True" and config['trimming']['long'] == 'True' else [],
     output:
         "results/qc/multiqc_report.html"
     conda:

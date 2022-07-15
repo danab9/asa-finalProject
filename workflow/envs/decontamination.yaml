@@ -2,12 +2,11 @@ name: decontamination
 channels:
   - defaults
   - bioconda
-dependencies: # I added versions for samtools - minimap2
+dependencies: 
   - samtools=1.15.1
   - bedtools=2.30.0
   - bowtie2=2.4.5
   - kraken2=2.1.2
   - minimap2=2.24
-  - bcftools=1.9
   
 prefix: /Users/danabarilan/opt/miniconda3/envs/seqAnalysis

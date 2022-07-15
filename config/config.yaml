@@ -14,7 +14,7 @@ blacklist: "resources/blacklist.TODO" #A blacklist can optionally be provided to
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
 trimming: 
-  long: 'False'
+  long: 'True'
   short: 'True'
 screening: 
   long: 'True'
@@ -23,7 +23,7 @@ decontamination:
   long: "True"
   short: "True"
 qc:
-  long: 'True'
+  long: 'False'
   short: 'True'
 #Assembly 
 hybrid_assembly: "True" 

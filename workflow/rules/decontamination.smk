@@ -1,13 +1,13 @@
 rule short_kraken: 
     """
-
+    Scanning short reads for decontamination usingKraken. 
     """ #TODO: add comments 
     input:
         r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
         r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2']) if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz"
     output:
-        clasified_reads_1 = "results/fastq/kraken/{sample}_1.fq",
-        clasified_reads_2 = "results/fastq/kraken/{sample}_2.fq",
+        clasified_reads_1 = "results/fastq/kraken/short/{sample}_1.fq",
+        clasified_reads_2 = "results/fastq/kraken/short/{sample}_2.fq",
         report = "results/report/kraken/short/{sample}.txt"
     log:
         "results/logs/kraken/short/{sample}.log"
@@ -18,13 +18,13 @@ rule short_kraken:
     conda:
         "../envs/decontamination.yaml"
     shell:
-        "kraken2 -db {params.kraken_db} {params.quick} --paired --classified-out results/fastq/kraken/{wildcards.sample}#.fq {input.r1} {input.r2} --report {output.report} --threads {threads} &> {log}"
+        "kraken2 -db {params.kraken_db} {params.quick} --paired --classified-out results/fastq/kraken/short/{wildcards.sample}#.fq {input.r1} {input.r2} --report {output.report} --threads {threads} &> {log}"
 
 rule long_kraken: 
     input:
         long=(lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' else "results/fastq/trimmed/short/{sample}_long.fastq.gz",
     output:
-        clasified_reads = "results/fastq/kraken/{sample}_long.fq",
+        clasified_reads = "results/fastq/kraken/long/{sample}_long.fq",
         report = "results/report/kraken/long/{sample}.txt"
     log:
         "results/logs/kraken/long/{sample}.log"

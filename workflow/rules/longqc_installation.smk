@@ -8,25 +8,23 @@ rule clone_longqc:
     """
     # no input needed 
     output:
-        "results/installations/LongQC/longQC.py"
+        python_file = "results/installations/LongQC/longQC.py"
     log:
         "results/logs/longqc_installation/git_clone.log"
     threads: 1
     shell:
-        """
-        git clone https://github.com/yfukasawa/LongQC.git results/installations/LongQC 2> {log}
-        """
+        "git clone https://github.com/yfukasawa/LongQC.git results/installations/LongQC &> {log}" #TODO: make sure it doesn't produce output. 
 
 rule make_longqc:
     """
-    run make commmand in LongQC/minimap2-coverage/ as part of LongQC installation.
+    Run make commmand in LongQC/minimap2-coverage/ as part of LongQC installation.
     """
     input:
-        "results/installations/LongQC/longQC.py"
+        python_file = "results/installations/LongQC/longQC.py"
     output:
-        touch_file=temp(touch("results/make_longqc.done"))
+        touch_file=temp(touch("results/installations/make_longqc.done"))
     log:
         "results/logs/longqc_installation/make.log"
     threads: 1
     shell:
-        "make -C results/installations/LongQC/minimap2-coverage 2> {log}"
+        "make -C results/installations/LongQC/minimap2-coverage &> {log}" 
