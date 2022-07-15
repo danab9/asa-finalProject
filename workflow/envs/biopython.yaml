@@ -1,0 +1,8 @@
+name: biopython
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+  - r
+dependencies:
+  - biopython=1.79
