@@ -6,20 +6,22 @@ rule fastqc_untrimmed:
     input:
         fq = lambda wildcards: samples.at[wildcards.sample, 'fq' + wildcards.number]
     output:
-        # html= "results/qc/untrimmed/short/{sample}_{number}_fastqc.html",
-        # zip= "results/qc/untrimmed/short/{sample}_{number}_fastqc.zip"
-        # Since we don't know the basename we create a touch file that triggers multiQC
-        #dir = directory("results/qc/untrimmed/short"),
-        touch_file = temp(touch("results/logs/qc/untrimmed/short/{sample}_{number}.done")),
+        html= "results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.html",
+        zip= "results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.zip", 
     conda:
         "../envs/qc.yaml"
+    params:
+        output_filename_html = lambda wildcards, input: "results/qc/untrimmed/short/" + os.path.basename(input.fq).split(".")[0] + "_fastqc.html", #Rename the samples, such that they are pretty and comprehensive when viewing the MultiQC
+        output_filename_zip = lambda wildcards, input: "results/qc/untrimmed/short/" + os.path.basename(input.fq).split(".")[0] + "_fastqc.zip", 
     log:
-        "results/logs/qc/untrimmed/short/{sample}_{number}.log" #"results/logs/qc/untrimmed/short/{sample}_{number}.log"
+        "results/logs/qc/untrimmed/short/{sample}_{number}.log" 
     shell:
         """ 
         mkdir -p results/qc/untrimmed/short/
         fastqc {input.fq} -o results/qc/untrimmed/short &> {log}
-        """ 
+        mv {params.output_filename_html} {output.html} \\
+            && mv  {params.output_filename_zip} {output.zip}
+        """ #TODO check if/why old files are not deleted. 
 
 rule fastqc_trimmed:
     """
@@ -27,33 +29,20 @@ rule fastqc_trimmed:
     Optional: if qc:short and trimming:short are set to 'True' in the configuration file. 
     """
     input:
-        trimmed="results/fastq/trimmed/short/{sample}_{number}_{paired}.fastq.gz"
+        trimmed="results/fastq/trimmed/short/{sample}_{number}_{paired}.fastq.gz",#TODO changed
     output:
-        html="results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",
-        zip="results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.zip"
+        html="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html", #TODO changed
+        zip="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.zip", #TODO changed
     conda:
         "../envs/qc.yaml"
     log:
         "results/logs/qc/trimmed/short/{sample}_{number}_{paired}.log"
     shell:
-        "fastqc {input.trimmed} -o results/qc/trimmed/short &> {log}"
-
-# rule fastqc_long:
-#     """
-#     Quality Control using FastQC for ONTreads
-#     Optional: if qc:long is set to 'True' in the configuration file. 
-#     """
-#     input:
-#         fq = lambda wildcards: samples.at[wildcards.sample, 'ONT']
-#     output:
-#         html= "results/qc/fastq/fastqc/{sample}_fastqc.html",
-#         zip= "results/qc/fastq/fastqc/{sample}_fastqc.zip"
-#     conda:
-#         "../envs/qc.yaml"
-#     log:
-#         "results/logs/qc/untrimmed/fastqc/{sample}_ONT.log"
-#     shell:
-#         "fastqc {input.fq} -o results/qc/fastq &> {log}"
+        """
+        fastqc {input.trimmed} -o results/qc/trimmed/short &> {log}
+        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.html results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_short_trimmed_fastqc.html
+        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.zip results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_short_trimmed_fastqc.zip
+        """
     
 rule longqc_untrimmed:
     """
@@ -86,7 +75,8 @@ rule longqc_trimmed:
     Optional: if qc:long and trimming:short are set to 'True' in the configuration file. 
     """
     input:
-        trimmed_read = "results/fastq/trimmed/long/{sample}.fastq.gz"  
+        trimmed_read = "results/fastq/trimmed/long/{sample}.fastq.gz",
+        touch_file="results/installations/make_longqc.done", # Triggers the installation of longQC.   
     output:
         html = "results/qc/trimmed/long/{sample}/web_summary.html"
     conda:
@@ -127,7 +117,6 @@ rule trimmomatic:
     threads: 4
     shell:
         "trimmomatic PE {input.r1} {input.r2} {output.r1_p} {output.r1_u} {output.r2_p} {output.r2_u} TRAILING:{params.trailing} ILLUMINACLIP:{params.illuminaclip} -threads {threads} {params.extra} -trimlog {log} &> {log}" 
-        #TODO: check if it doesnt produce shell output anymore. 
 
 
 rule porechop:
@@ -156,9 +145,9 @@ rule multiqc:
     Optional: if qc:short or qc:long is set to 'True' in the configuration file. 
     """
     input:
-        untrimmed_short_touch_file = expand("results/logs/qc/untrimmed/short/{sample}_{number}.done", sample=IDS,number=['1', '2']) 
-            if config["qc"]["short"] =="True" else [],
-        trimmed_short=expand("results/qc/trimmed/short/{sample}_{number}_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P'])
+        untrimmed_short = expand("results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.html", sample=IDS,number=['1', '2']) 
+            if config["qc"]["short"] == "True" else [],
+        trimmed_short=expand("results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P'])
             if config['qc']['short'] == 'True' and config['trimming']['short'] == 'True' else [], #Unpaired samples for read 2 result don't exist. Since we are also not involved in the later analysis. 
         untrimmed_long = expand("results/qc/untrimmed/long/{sample}/web_summary.html", sample=IDS) 
             if config["qc"]["long"] =="True" else [],
@@ -174,4 +163,4 @@ rule multiqc:
     params:
         extra=config["multiqc"]["extra"]
     shell:
-        "multiqc results/qc {params.extra} -o results/qc &> {log}" 
+        "multiqc results/qc {params.extra} -o results/qc -f --fn_as_s_name &> {log}" #-f is used to overwrite existing reports, to prevent Snakemake from resulting in an error. 

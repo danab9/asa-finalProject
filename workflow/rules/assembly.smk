@@ -8,7 +8,7 @@ rule assembly:
     input:
         short_r1 = (lambda wildcards: samples.at[wildcards.sample, 'fq1']) if config["trimming"]["short"]=='False' and config["decontamination"] != "True" else "results/fastq/decontaminated/short/{sample}_1.fq" if config["decontamination"] == "True" else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
         short_r2 =  (lambda wildcards: samples.at[wildcards.sample, 'fq2']) if config["trimming"]["short"]=='False' and config["decontamination"] != "True" else "results/fastq/decontaminated/short/{sample}_2.fq" if config["decontamination"] == "True" else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz",
-        long = ((lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' and config["decontamination"] != "True" else"results/fastq/decontaminated/long/{sample}.fq" if config["decontamination"] == "True" else "results/fastq/trimmed/long/{sample}.fastq.gz") if config["hybrid_assembly"] == "True" else []
+        long = ((lambda wildcards: samples.at[wildcards.sample, 'ONT']) if config["trimming"]["long"]=='False' and config["decontamination"] != "True" else"results/fastq/decontaminated/long/{sample}.fq" if config["decontamination"] == "True" else "results/fastq/trimmed/long/{sample}.fastq.gz") if config["hybrid_assembly"] == "True" else [],
     output:
         genome = "results/assembly/{sample}/assembly.fasta",
         dir = directory("results/assembly/{sample}"),
