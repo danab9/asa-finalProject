@@ -11,6 +11,25 @@
 #     shell:
 #         "python3 -m augur align --sequences {input.sequences} -o {output.alignment} --threads {threads} &> {log}"
 
+rule filter_msa:
+    """
+    Leaves out samples specified by the user. Runs a designated python script.
+    """
+    input:
+        msa="results/pangenome/core_gene_alignment.aln",
+        black_list=config["blacklist"]
+    output:
+        filtered = "results/pangenome/core_gene_alignment_filtered.aln"
+    log:
+        "results/logs/blacklist.log"
+    threads:
+        1
+    conda:
+        "../envs/biopython.yaml"
+    script:
+        "../scripts/filter_samples.py"
+
+
 rule tree:
     """
     Creates a phylogenetic tree using the augur software of nextstrain. The method can be set in the configuration file.

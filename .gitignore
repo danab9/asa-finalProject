@@ -9,3 +9,6 @@ results/
 resources/kraken_db
 .snakemake/
 headers.txt
+busco_downloads/
+sample1_qc/
+sample1.fasta

@@ -33,10 +33,11 @@ rule all:
         #TEMPORARY INPUTS
         #longqc_untrimmed = expand("results/qc/untrimmed/long/{sample}/web_summary.html", sample=IDS) if config["qc"]["long"] =="True" else [],  # still not working 
         # #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
-        # quast = "results/qc/assembly/quast/sample1/report.txt",
-        # busco = "results/qc/assembly/BUSCO/sample1/short_summary.specific." + busco_lin_name + ".sample1.json" if config["busco"]=='True' else [],
+        #quast = "results/qc/assembly/quast/sample1/report.txt",
+        #busco = "results/qc/assembly/BUSCO/sample1/short_summary.specific." + busco_lin_name + ".sample1.json" if config["busco"]=='True' else [],
         # #roary = if len(samples.index) <2 checkNumberSampels else s"results/pangenome/sample1.txt"
-        # roary = "results/pangenome/sample1.txt",
+        # roary = "results/pangenome/core_gene_alignment.aln",
+        # filtered_core_aln = "results/pangenome/core_gene_alignment_filtered.aln" if config["blacklist"] != '' else [], 
         # annotation = "results/annotations/sample2_genes.gff"
         # test = "test_aggregate_tables.txt"
 

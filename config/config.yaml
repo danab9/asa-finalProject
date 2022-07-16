@@ -7,7 +7,7 @@ contamination_reference:
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
 resistance_database: "" 
-blacklist: "resources/blacklist.TODO" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
+blacklist: "resources/blacklist.txt" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
 
 
 #OPTIONAL STEPS
@@ -15,10 +15,10 @@ blacklist: "resources/blacklist.TODO" #A blacklist can optionally be provided to
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
 trimming: 
-  long: 'True'
+  long: 'False'
   short: 'True'
 screening: 
-  long: 'True'
+  long: 'False'
   short: 'True'   
 decontamination: 
   long: "False"
@@ -27,7 +27,7 @@ qc:
   long: 'True'
   short: 'True'
 #Assembly 
-hybrid_assembly: "True" 
+hybrid_assembly: "False" 
 busco: "True"
 #Analysis 
 mlst: 'False'
@@ -68,14 +68,16 @@ tree:
 quast:
   extra: "" #https://github.com/ablab/quast
 busco_params: #If BUSCO is set to true: if specified path to BUSCO lineage local file, prevent BUSCO searching online with offline: "True"
-  lineage: "bacteria_odb10" # Path to lineage directory OR lineage name when offline: "False"
+  lineage: "enterobacterales_odb10" # Path to lineage directory OR lineage name when offline: "False"
   offline: "False" 
   extra: "" #https://github.com/metashot/busco
 rgi:
   extra: "" #https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
 blastn:
   extra: "" #https://www.ncbi.nlm.nih.gov/books/NBK569856/
-prodigal:
+prokka:
+  extra: "" #https://github.com/tseemann/prokka 
+
   extra: "" #https://www.biocode.ltd/catalog-tooldata/prodigal
 roary: 
   percentage_threshold: "95" #percentage of isolates a gene must be in to be core
