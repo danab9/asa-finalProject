@@ -7,7 +7,7 @@ rule pangenome:
         annotation = expand("results/annotations/{sample}_genes.gff", sample=IDS)
     output:
         #dir = directory("results/pangenome"),
-        msa = "results/pangenome/core_gene_alignment.aln",
+        msa = "results/msa/core_gene_alignment.fa"
     log:
         "results/logs/pangenome/roary.log"
     threads: 8
@@ -19,7 +19,7 @@ rule pangenome:
     shell:
         """
         roary -f "results/pangenome/"  -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} &> {log}
-        cp results/pangenome/*/core_gene_alignment.aln results/pangenome/
+        cp results/pangenome/*/core_gene_alignment.aln {output.msa}
         """  
 #removed {wildcards.sample}  from -o. 
 #-o results/pangenome/

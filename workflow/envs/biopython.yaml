@@ -6,3 +6,4 @@ channels:
   - r
 dependencies:
   - biopython=1.79
+  - python=3.9
