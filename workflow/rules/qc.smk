@@ -6,8 +6,8 @@ rule fastqc_untrimmed:
     input:
         fq = lambda wildcards: samples.at[wildcards.sample, 'fq' + wildcards.number]
     output:
-        html= "results/qc/untrimmed/short/{sample}_{number}_untrimmed_short_fastqc.html",
-        zip= "results/qc/untrimmed/short/{sample}_{number}_untrimmed_short_fastqc.zip", 
+        html= "results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.html",
+        zip= "results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.zip", 
     conda:
         "../envs/qc.yaml"
     params:
@@ -31,8 +31,8 @@ rule fastqc_trimmed:
     input:
         trimmed="results/fastq/trimmed/short/{sample}_{number}_{paired}.fastq.gz",#TODO changed
     output:
-        html="results/qc/trimmed/short/{sample}_{number}_{paired}_short_trimmed_fastqc.html", #TODO changed
-        zip="results/qc/trimmed/short/{sample}_{number}_{paired}_short_trimmed_fastqc.zip", #TODO changed
+        html="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html", #TODO changed
+        zip="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.zip", #TODO changed
     conda:
         "../envs/qc.yaml"
     log:
@@ -145,9 +145,9 @@ rule multiqc:
     Optional: if qc:short or qc:long is set to 'True' in the configuration file. 
     """
     input:
-        untrimmed_short = expand("results/qc/untrimmed/short/{sample}_{number}_untrimmed_short_fastqc.html", sample=IDS,number=['1', '2']) 
+        untrimmed_short = expand("results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.html", sample=IDS,number=['1', '2']) 
             if config["qc"]["short"] == "True" else [],
-        trimmed_short=expand("results/qc/trimmed/short/{sample}_{number}_{paired}_short_trimmed_fastqc.html",sample=IDS,number=['1', '2'],paired=['P'])
+        trimmed_short=expand("results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P'])
             if config['qc']['short'] == 'True' and config['trimming']['short'] == 'True' else [], #Unpaired samples for read 2 result don't exist. Since we are also not involved in the later analysis. 
         untrimmed_long = expand("results/qc/untrimmed/long/{sample}/web_summary.html", sample=IDS) 
             if config["qc"]["long"] =="True" else [],
@@ -163,4 +163,4 @@ rule multiqc:
     params:
         extra=config["multiqc"]["extra"]
     shell:
-        "multiqc results/qc {params.extra} -o results/qc -f &> {log}" #-f is used to overwrite existing reports, to prevent Snakemake from resulting in an error. 
+        "multiqc results/qc {params.extra} -o results/qc -f --fn_as_s_name &> {log}" #-f is used to overwrite existing reports, to prevent Snakemake from resulting in an error. 
