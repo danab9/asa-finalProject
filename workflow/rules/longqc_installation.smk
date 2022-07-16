@@ -6,14 +6,14 @@ rule clone_longqc:
     """
     Cloning longQC from github: https://github.com/yfukasawa/LongQC.git
     """
-    # no input needed 
+    #No input is needed, since it is cloned from the git repository. 
     output:
         python_file = "results/installations/LongQC/longQC.py"
     log:
         "results/logs/longqc_installation/git_clone.log"
     threads: 1
     shell:
-        "git clone https://github.com/yfukasawa/LongQC.git results/installations/LongQC &> {log}" #TODO: make sure it doesn't produce output. 
+        "git clone https://github.com/yfukasawa/LongQC.git results/installations/LongQC &> {log}" 
 
 rule make_longqc:
     """
@@ -22,7 +22,7 @@ rule make_longqc:
     input:
         python_file = "results/installations/LongQC/longQC.py"
     output:
-        touch_file=temp(touch("results/installations/make_longqc.done"))
+        touch_file=touch("results/installations/make_longqc.done") 
     log:
         "results/logs/longqc_installation/make.log"
     threads: 1
