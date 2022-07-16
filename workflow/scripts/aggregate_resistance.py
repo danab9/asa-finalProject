@@ -6,6 +6,10 @@ Lengthy columns, e.g. with sequence information, are dropped in order to keep th
 
 import pandas as pd
 import os
+import sys
+
+with open(snakemake.log[0], "w") as log:  # redirect output to log file
+    sys.stderr = sys.stdout = log
 
 resistance_dirs = snakemake.input["resistance"] 
 resistance_csv = snakemake.output["csv"] 

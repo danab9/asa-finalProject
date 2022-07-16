@@ -6,6 +6,11 @@ hits that don not fullfill the E-value threshold are also pruned.
 
 import pandas as pd
 import os
+import sys
+
+with open(snakemake.log[0], "w") as log:  # redirect output to log file
+    sys.stderr = sys.stdout = log
+    
 virulence_dirs = snakemake.input["virulence"] 
 virulence_csv = snakemake.output["csv"] 
 eval_threshold = snakemake.params["eval"] 

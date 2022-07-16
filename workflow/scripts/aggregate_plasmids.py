@@ -6,6 +6,10 @@ hits that don not fullfill the E-value threshold are also pruned.
 
 import pandas as pd
 import os
+import sys
+
+with open(snakemake.log[0], "w") as log:  # redirect output to log file
+    sys.stderr = sys.stdout = log
 
 plasmids_dirs = snakemake.input["plasmids"] #["/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/results/plasmids/sample1.tsv", "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/results/plasmids/sample2.tsv",] #
 plasmids_csv = snakemake.output["csv"] #"test.csv" #
