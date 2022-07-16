@@ -12,3 +12,7 @@ headers.txt
 busco_downloads/
 sample1_qc/
 sample1.fasta
+resources/references/GCF_000005845.2_ASM584v2_genomic.fna.gz
+resources/references/contamination_short.fna
+.gitignore
+resources/references/contamination_long.fna

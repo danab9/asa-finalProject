@@ -2,8 +2,8 @@
 #-----------------
 samples: "resources/samples.tsv"
 contamination_reference:
-  long: "resources/references/contamination_long.fasta" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
-  short: "resources/references/contamination_short.fasta" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
+  long: "resources/references/contamination_short.fna" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
+  short: "resources/references/contamination_long.fna" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
 resistance_database: "" 
@@ -31,9 +31,9 @@ hybrid_assembly: "False"
 busco: "True"
 #Analysis 
 mlst: 'False'
-resistance: 'False'
-virulence: 'False'
-plasmids: 'False'
+resistance: 'True'
+virulence: 'True'
+plasmids: 'True'
 
 
 #PARAMETERS
@@ -74,6 +74,7 @@ busco_params: #If BUSCO is set to true: if specified path to BUSCO lineage local
 rgi:
   extra: "" #https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
 blastn:
+  eval: 0.000005 # E-value threshold used to prune the results after doing the blast search. 
   extra: "" #https://www.ncbi.nlm.nih.gov/books/NBK569856/
 prokka:
   extra: "" #https://github.com/tseemann/prokka 
