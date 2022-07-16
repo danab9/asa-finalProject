@@ -1,6 +1,11 @@
 #aggregating tsv tables for plasmids
 # read tsv with pandas. 
 import pandas as pd
+import sys
+
+with open(snakemake.log[0], "w") as log:  # redirect output to log file
+    sys.stderr = sys.stdout = log
+
 
 plasmids_dirs = snakemake.input["plasmids"]
 plasmids_csv = snakemake.output["plasmids"]

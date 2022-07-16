@@ -16,10 +16,10 @@ rule filter_msa:
     Leaves out samples specified by the user. Runs a designated python script.
     """
     input:
-        msa="results/msa/core_gene_alignment.aln",
+        msa="results/msa/core_gene_alignment.fa",
         black_list=config["blacklist"]
     output:
-        filtered = "results/msa/core_gene_alignment_filtered.aln"
+        filtered = "results/msa/core_gene_alignment_filtered.fa"
     log:
         "results/logs/blacklist.log"
     threads:
@@ -35,7 +35,7 @@ rule tree:
     Creates a phylogenetic tree using the augur software of nextstrain. The method can be set in the configuration file.
     """
     input: # takes filtered file if blacklist is specified by the user
-        alignment = "results/msa/core_gene_alignment.aln" if config["blacklist"] != 'True' else "results/msa/core_gene_alignment_filtered.aln"   
+        alignment = "results/msa/core_gene_alignment.fa" if config["blacklist"] == '' else "results/msa/core_gene_alignment_filtered.fa"   
     output:
         tree = "results/tree/tree.nwk"
     log:
@@ -47,7 +47,7 @@ rule tree:
     conda:
         "../envs/phylogenetics.yaml"
     shell:
-        "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --threads {threads} &> {log}"
+        "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --nthreads {threads} &> {log}"
 
 rule visualize_tree:
     """
