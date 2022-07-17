@@ -15,68 +15,6 @@ rule mlst:
     shell:
         "mlst --csv {input.genomes} > {output.table} 2> {log}" 
 
-
-# rule download_resistance_db:
-#     """
-#     Downloads a plasmid reference database from https://ccb-microbe.cs.uni-saarland.de/plsdb
-#     in case no database was provided by the user under "resistance_database" in the configuration file. 
-#     """
-#     output:
-#         database_sequences = "results/resistance_database/nucleotide_fasta_protein_homolog_model.fasta"
-#     log:
-#         "results/logs/resistance/download_database_download.log"
-#     shell: 
-#         """
-#         wget -P results/resistance_database https://card.mcmaster.ca/latest/data &> {log}
-#         mv results/resistance_database/data results/resistance_database/card-data.tar.bz2
-#         bzip2 -dk results/resistance_database/card-data.tar.bz2 &> {log}
-#         tar -xvf results/resistance_database/card-data.tar -C results/resistance_database &> {log}
-#         """
-
-# rule make_resistance_db:
-#     """
-#     Makes the downloaded plamid database ready for search with blast 
-#     in case no database was provided by the user under "resistance_database" in the configuration file. 
-#     """
-#     input:
-#         sequences = "results/resistance_database/nucleotide_fasta_protein_homolog_model.fasta"
-#     output:
-#         database = multiext(
-#             "results/resistance_database/nucleotide_fasta_protein_homolog_model.fasta",
-#             ".nhr",".nin",".nog",".nsd",".nsi",".nsq")
-#     conda:
-#         "../envs/virulence.yaml"
-#     log:
-#         "results/logs/resistance/download_database_make.log"
-#     shell:
-#         "makeblastdb -in results/resistance_database/nucleotide_fasta_protein_homolog_model.fasta -dbtype nucl -parse_seqids -logfile {log}"
-
-# rule resistance:
-#     """
-#     Screens for resistance genes in each sample using the PLSD database and blast. 
-#     Optional: if resistance is set to 'True' in the configuration file. 
-#     """ 
-#     input:
-#         genome = "results/genomes/{sample}.fasta",
-#         database = multiext(
-#             "results/resistance_database/nucleotide_fasta_protein_homolog_model.fasta",
-#             ".nhr",".nin",".nog",".nsd",".nsi",".nsq"
-#         ) if config["resistance_database"] == "" else multiext(
-#             config["resistance_database"],
-#             ".nhr",".nin",".nog",".nsd",".nsi",".nsq"),
-#         database_sequences = "results/resistance_database/nucleotide_fasta_protein_homolog_model.fasta"
-#     output:
-#         table = "results/resistance/{sample}.tsv",
-#     log:
-#         "results/logs/resistance/{sample}.log"
-#     threads: 8
-#     params:
-#         extra = config["blastn"]["extra"],
-#     conda:
-#         "../envs/virulence.yaml"
-#     shell:
-#        "blastn -query {input.genome} -db {input.database_sequences} -outfmt 6 -out {output} -num_threads {threads} 2> {log}" 
-
 rule resistance: 
     """
     Screens for antibiotic resistance genes in each sample using the CARD database 
@@ -100,7 +38,6 @@ rule resistance:
         rgi main -i {input.genome} --output_file {output.dir} {params.extra} --input_type contig -n {threads} 2> {log}
         #rgi heatmap --input ../storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/results/resistance
         """ 
-# TODO: check with 1 core. 
 
 rule download_plasmids_db:
     """
