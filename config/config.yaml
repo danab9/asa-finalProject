@@ -2,8 +2,8 @@
 #-----------------
 samples: "resources/samples.tsv"
 contamination_reference:
-  long: "resources/references/contamination_long.fasta" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
-  short: "resources/references/contamination_short.fasta" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
+  long: "resources/references/contamination_short.fna" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
+  short: "resources/references/contamination_long.fna" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
 resistance_database: "" 
@@ -15,19 +15,19 @@ blacklist: "" #"resources/blacklist.txt" #A blacklist can optionally be provided
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
 trimming: 
-  long: 'False'
+  long: 'True'
   short: 'True'
 screening: 
   long: 'True'
   short: 'True'   
 decontamination: 
-  long: "False"
+  long: "True" 
   short: "False"
 qc:
   long: 'True'
   short: 'True'
 #Assembly 
-hybrid_assembly: "False" 
+hybrid_assembly: "True" 
 busco: "True"
 #Analysis 
 mlst: 'False'
@@ -50,7 +50,7 @@ multiqc:
 trimmomatic:
   trailing: 20                                  #Specifies the minimum quality required to keep a base.
   illuminaclip:
-    file: "resources/adapters/TruSeq3-PE.fa"    #Path to the adapters, should be provided if trimming for short reads is set to true. 
+    file: "resources/adapters/NexteraPE-PE.fa"    #Path to the adapters, should be provided if trimming for short reads is set to true. 
     seedMissmatches: '2' #Specifies the maximum mismatch count which will still allow a full match to be performed
     palindromeClipThreshold: '30' #Specifies how accurate the match between the two 'adapter ligated' reads must be for PE palindrome read alignment.
     simpleClipThreshold: '10' #Specifies how accurate the match between any adapter etc. sequence must be against a read.
@@ -74,6 +74,7 @@ busco_params: #If BUSCO is set to true: if specified path to BUSCO lineage local
 rgi:
   extra: "" #https://github.com/arpcard/rgi#using-rgi-main-genomes-genome-assemblies-metagenomic-contigs-or-proteomes
 blastn:
+  eval: 0.000005 # E-value threshold used to prune the results after doing the blast search. 
   extra: "" #https://www.ncbi.nlm.nih.gov/books/NBK569856/
 prokka:
   extra: "" #https://github.com/tseemann/prokka 

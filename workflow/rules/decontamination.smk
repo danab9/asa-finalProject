@@ -3,7 +3,7 @@ rule short_kraken_contaminated:
     Scanning short contaminated reads for decontamination using Kraken,
     such that the reports can be analysed by the user to provide proper decontamination references. 
     Optional: if screening:short is set to 'True' in the configuration file.  
-    """ #TODO: add comments 
+    """ 
     input:
         r1=(lambda wildcards: samples.at[wildcards.sample, 'fq1']) 
             if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_1_P.fastq.gz",
@@ -29,9 +29,9 @@ rule short_kraken_decontaminated:
     Scanning short already decontaminated reads for decontamination using Kraken,
     such that the verify that the contamination has properly been removed. 
     Optional: if screening:short is set to 'True' in the configuration file.  
-    """ #TODO: add comments 
+    """ 
     input:
-        r1="results/fastq/decontaminated/short/{sample}_1.fq", #TODO use if wildcard.contamination == "contamindated", to combine the rules
+        r1="results/fastq/decontaminated/short/{sample}_1.fq", 
         r2="results/fastq/decontaminated/short/{sample}_2.fq"
     output:
         clasified_reads_1 = "results/fastq/kraken/decontaminated/short/{sample}_1.fq",
@@ -157,7 +157,7 @@ rule short_bowtie_map_contaminations:
         r2=(lambda wildcards: samples.at[wildcards.sample, 'fq2'])
                 if config["trimming"]["short"]=='False' else "results/fastq/trimmed/short/{sample}_2_P.fastq.gz"
     output:
-        "results/sam_contaminations/{sample}.sam"
+        "results/sam_contaminations/short/{sample}.sam"
     log:
         "results/logs/bowtie2/contamination_alignment/{sample}.log"
     threads: 6
@@ -174,16 +174,16 @@ rule short_keep_unmapped:
     Optional: if decontamination:short is set to 'True' in the configuration file.  
     """ 
     input:
-        "results/sam_contaminations/{sample}.sam"
+        "results/sam_contaminations/short/{sample}.sam"
     output:
-        "results/bam_decontaminated/{sample}.bam"
+        "results/bam_decontaminated/short/{sample}.bam"
     conda:
         "../envs/decontamination.yaml"
     threads: 4
     log:
         "results/logs/samtools/contaminations/{sample}_bam_unmapped.log"
     shell:
-        "samtools view -b -f 12 {input} --threads {threads} > {output} 2> {log}" #The flag -f 12 discards all unmapped mates (paired reads) TODO use -f 12 or -rf 12
+        "samtools view -b -f 12 {input} --threads {threads} > {output} 2> {log}" #The flag -f 12 discards all unmapped mates (paired reads) 
 
 rule short_sam_to_fastq:
     """
@@ -191,7 +191,7 @@ rule short_sam_to_fastq:
     Optional: if decontamination:short is set to 'True' in the configuration file.  
     """ 
     input:
-         "results/bam_decontaminated/{sample}.bam"
+         "results/bam_decontaminated/short/{sample}.bam"
     output:
         short_1="results/fastq/decontaminated/short/{sample}_1.fq", 
         short_2="results/fastq/decontaminated/short/{sample}_2.fq"
@@ -214,14 +214,18 @@ rule long_decontamination:
         reference = config["contamination_reference"]["long"],
         long = "results/fastq/trimmed/long/{sample}.fastq.gz" if config["trimming"]["long"]=='True' else (lambda wildcards: samples.at[wildcards.sample, 'ONT']),
     output:
-        bam = "results/bam_decontaminated/long/{sample}.bam"
+        bam = "results/bam_decontaminated/long/{sample}.bam",
+        sam ="results/sam_contaminations/long/{sample}.sam",
     log:
         "results/logs/artificialreference/{sample}.log"
     threads: 4
     conda:
         "../envs/decontamination.yaml"
     shell:
-        "minimap2 -t {threads} -a {input.reference} {input.long} 2> {log} | samtools view -b -f 4 - > {output.bam} 2> {log}"  #The flag -f 4 discards all unmapped reads. TODO check if it works
+        """
+        minimap2 -t {threads} -a {input.reference} {input.long} -o {output.sam} 2> {log}  
+        samtools view -b -f 4 {output.sam} > {output.bam} 2> {log}
+        """  #The flag -f 4 discards all unmapped reads. 
 
 
 rule long_sam_to_fastq:

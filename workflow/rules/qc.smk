@@ -21,7 +21,7 @@ rule fastqc_untrimmed:
         fastqc {input.fq} -o results/qc/untrimmed/short &> {log}
         mv {params.output_filename_html} {output.html} \\
             && mv  {params.output_filename_zip} {output.zip}
-        """ #TODO check if/why old files are not deleted. 
+        """ 
 
 rule fastqc_trimmed:
     """
@@ -29,10 +29,10 @@ rule fastqc_trimmed:
     Optional: if qc:short and trimming:short are set to 'True' in the configuration file. 
     """
     input:
-        trimmed="results/fastq/trimmed/short/{sample}_{number}_{paired}.fastq.gz",#TODO changed
+        trimmed="results/fastq/trimmed/short/{sample}_{number}_{paired}.fastq.gz",
     output:
-        html="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html", #TODO changed
-        zip="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.zip", #TODO changed
+        html="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html", 
+        zip="results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.zip", 
     conda:
         "../envs/qc.yaml"
     log:
@@ -40,8 +40,8 @@ rule fastqc_trimmed:
     shell:
         """
         fastqc {input.trimmed} -o results/qc/trimmed/short &> {log}
-        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.html results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_short_trimmed_fastqc.html
-        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.zip results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_short_trimmed_fastqc.zip
+        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.html results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_short_trimmed_{wildcards.paired}_fastqc.html
+        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.zip results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_short_trimmed_{wildcards.paired}_fastqc.zip
         """
     
 rule longqc_untrimmed:
@@ -51,7 +51,7 @@ rule longqc_untrimmed:
     """
     input:
         fq = lambda wildcards: samples.at[wildcards.sample, 'ONT'],
-        touch_file="results/installations/make_longqc.done", #triggers the installation of longQC. 
+        touch_file="results/installations/make_longqc.done", # Triggers the installation of longQC. 
     output:
         html = "results/qc/untrimmed/long/{sample}/web_summary.html"
     conda:
@@ -148,7 +148,7 @@ rule multiqc:
         untrimmed_short = expand("results/qc/untrimmed/short/{sample}_{number}_short_untrimmed_fastqc.html", sample=IDS,number=['1', '2']) 
             if config["qc"]["short"] == "True" else [],
         trimmed_short=expand("results/qc/trimmed/short/{sample}_{number}_short_trimmed_{paired}_fastqc.html",sample=IDS,number=['1', '2'],paired=['P'])
-            if config['qc']['short'] == 'True' and config['trimming']['short'] == 'True' else [], #Unpaired samples for read 2 result don't exist. Since we are also not involved in the later analysis. 
+            if config['qc']['short'] == 'True' and config['trimming']['short'] == 'True' else [], # Unpaired samples for read 2 result don't exist. Since we are also not involved in the later analysis. 
         untrimmed_long = expand("results/qc/untrimmed/long/{sample}/web_summary.html", sample=IDS) 
             if config["qc"]["long"] =="True" else [],
         trimmed_long = expand("results/qc/trimmed/long/{sample}/web_summary.html", sample=IDS) 
