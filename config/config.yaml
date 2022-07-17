@@ -7,7 +7,7 @@ contamination_reference:
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
 resistance_database: "" 
-blacklist: "resources/blacklist.txt" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
+blacklist: "" #"resources/blacklist.txt" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
 
 
 #OPTIONAL STEPS

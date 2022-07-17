@@ -43,6 +43,7 @@ rule all:
         # filtered_core_aln = "results/pangenome/core_gene_alignment_filtered.aln" if config["blacklist"] != '' else [], 
         #phylogeny = "results/tree/tree.png"
         # annotation = "results/annotations/sample2_genes.gff"
+        tree = "results/tree/tree.png"
         #test = "test_aggregate_tables.txt",
         #decontaminate = "results/sam_contaminations/short/sample1.sam",
 

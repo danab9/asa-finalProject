@@ -9,5 +9,5 @@ dependencies:
   - iqtree=2.2.0.3
   - augur=16.0.3
   - pip:
-    #- nextstrain-augur #I cannot find the version of nextstrain-augur 
+    - nextstrain-augur #I cannot find the version of nextstrain-augur 
     - newick==1.3.2
