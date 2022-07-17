@@ -38,8 +38,9 @@ rule all:
         # #roary = if len(samples.index) <2 checkNumberSampels else s"results/pangenome/sample1.txt"
         # roary = "results/pangenome/core_gene_alignment.aln",
         # filtered_core_aln = "results/pangenome/core_gene_alignment_filtered.aln" if config["blacklist"] != '' else [], 
-        phylogeny = "results/tree/tree.png"
+        #phylogeny = "results/tree/tree.png"
         # annotation = "results/annotations/sample2_genes.gff"
         # test = "test_aggregate_tables.txt"
+        tree = "results/tree/tree.png"
 
         

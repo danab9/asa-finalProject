@@ -30,35 +30,37 @@ rule filter_msa:
         "../scripts/filter_samples.py"
 
 
-rule tree:
-    """
-    Creates a phylogenetic tree using the augur software of nextstrain. The method can be set in the configuration file.
-    """
-    input: # takes filtered file if blacklist is specified by the user
-        alignment = "results/msa/core_gene_alignment.fa" if config["blacklist"] == '' else "results/msa/core_gene_alignment_filtered.fa"   
-    output:
-        tree = "results/tree/tree.nwk"
-    log:
-        "results/logs/tree/tree.log"
-    threads: 6
-    params:
-        method = config["tree"]["method"],
-        extra = config["tree"]["extra"],
-    conda:
-        "../envs/phylogenetics.yaml"
-    shell:
-        "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --nthreads {threads} &> {log}"
+# rule tree:
+#     """
+#     Creates a phylogenetic tree using the augur software of nextstrain. The method can be set in the configuration file.
+#     """
+#     input: # takes filtered file if blacklist is specified by the user
+#         alignment = "results/msa/core_gene_alignment.fa" if config["blacklist"] == '' else "results/msa/core_gene_alignment_filtered.fa"   
+#     output:
+#         tree = "results/tree/tree.nwk"
+#     log:
+#         "results/logs/tree/tree.log"
+#     threads: 6
+#     params:
+#         method = config["tree"]["method"],
+#         extra = config["tree"]["extra"],
+#     conda:
+#         "../envs/phylogenetics.yaml"
+#     shell:
+#         "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --nthreads {threads} &> {log}"
 
 rule visualize_tree:
     """
     Visualizes the newick format of the phylogenetic tree using a python script. 
     """
     input:
-        tree = "results/tree/tree.nwk"
+        tree = "results/tree/tree.newick"
     output:
         png = 'results/tree/tree.png'
     conda:
         "../envs/phylogenetics.yaml"
+    log:
+        "results/logs/tree/visualize_tree.log"
     threads: 1
     script:
         "../scripts/treevisual.py"
