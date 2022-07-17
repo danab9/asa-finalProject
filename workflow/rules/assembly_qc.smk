@@ -3,7 +3,7 @@ rule quast:
     Quality Control of the assembled genomes using QUAST. 
     """
     input:
-        assembly="results/assembly/{sample}/assembly.fasta"
+        assembly="results/genomes/{sample}.fasta"
     output:
         report="results/qc/assembly/quast/{sample}/report.txt"
     log:
@@ -17,17 +17,15 @@ rule quast:
     shell:
         "quast -o results/qc/assembly/quast/{wildcards.sample} -t {threads} {params.extra} {input.assembly} &> {log}"
 
-busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule busco:
     """
     Quality Control of the assembled genomes using BUSCO.
     Optional: If busco is set to 'True' in the configuration file.  
     """ #TODO: explain the params 
     input:
-        assembly="results/assembly/{sample}/assembly.fasta"
+        assembly="results/genomes/{sample}.fasta"
     output:
-        #dir=directory("results/qc/assembly/BUSCO/"),
-        file = "results/qc/assembly/BUSCO/{sample}/short_summary.specific." + busco_lin_name + ".{sample}.json"
+        file = "results/qc/assembly/BUSCO/{sample}/short_summary_{sample}.txt"
     log:
         "results/logs/busco/{sample}.log"
     conda:
@@ -38,7 +36,11 @@ rule busco:
         extra = config["busco_params"]["extra"]
     threads: 8
     shell:
-        "busco -i {input.assembly} -o {wildcards.sample} --out_path results/qc/assembly/BUSCO/ -l {params.lineage} -m genome {params.offline} {params.extra} --cpu {threads} -f &> {log}"
+        """
+        busco -i {input.assembly} -o {wildcards.sample} --out_path results/qc/assembly/BUSCO/ -l {params.lineage} -m genome {params.offline} {params.extra} --cpu {threads} -f &> {log}
+        mv results/qc/assembly/BUSCO/{wildcards.sample}/short_summary.specific.{params.lineage}.{wildcards.sample}.txt results/qc/assembly/BUSCO/{wildcards.sample}/{wildcards.sample}.txt
+        mv results/qc/assembly/BUSCO/{wildcards.sample}/run_{params.lineage}/short_summary.txt results/qc/assembly/BUSCO/{wildcards.sample}/short_summary_{wildcards.sample}.txt
+        """ # Moves output files, such that they appear by sample name and not double in the MultiQC report
 
 
 rule multiqc_assembly:
@@ -47,7 +49,7 @@ rule multiqc_assembly:
     """
     input:
         quast = expand("results/qc/assembly/quast/{sample}/report.txt", sample=IDS),
-        busco = expand("results/qc/assembly/BUSCO/{sample}/short_summary.specific." + busco_lin_name + ".{sample}.json", sample=IDS)
+        busco = expand("results/qc/assembly/BUSCO/{sample}/short_summary_{sample}.txt", sample=IDS)
     output:
         report = "results/qc/assembly/multiqc_report.html"
     log:
@@ -57,4 +59,4 @@ rule multiqc_assembly:
     params:
         extra=config["multiqc"]["extra"]
     shell:
-        "multiqc results/qc/assembly {params.extra} -o results/qc/assembly &> {log}" 
+        "multiqc results/qc/assembly {params.extra} -o results/qc/assembly -f &> {log}" # -f replaces existing multiQC

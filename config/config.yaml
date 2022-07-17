@@ -2,7 +2,7 @@
 #-----------------
 samples: "resources/samples.tsv"
 contamination_reference:
-  long: "resources/references/contamination_short.fna" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
+  long: "" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
   short: "resources/references/contamination_long.fna" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
