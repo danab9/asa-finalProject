@@ -15,25 +15,25 @@ blacklist: "resources/blacklist.txt" #A blacklist can optionally be provided to 
 #Optional workflow steps can be set to "True" or "False" each 
 #Preprocessing 
 trimming: 
-  long: 'False'
+  long: 'True'
   short: 'True'
 screening: 
   long: 'True'
   short: 'True'   
 decontamination: 
-  long: "False"
+  long: "True" 
   short: "False"
 qc:
   long: 'True'
   short: 'True'
 #Assembly 
-hybrid_assembly: "False" 
+hybrid_assembly: "True" 
 busco: "True"
 #Analysis 
 mlst: 'False'
-resistance: 'True'
-virulence: 'True'
-plasmids: 'True'
+resistance: 'False'
+virulence: 'False'
+plasmids: 'False'
 
 
 #PARAMETERS
@@ -50,7 +50,7 @@ multiqc:
 trimmomatic:
   trailing: 20                                  #Specifies the minimum quality required to keep a base.
   illuminaclip:
-    file: "resources/adapters/TruSeq3-PE.fa"    #Path to the adapters, should be provided if trimming for short reads is set to true. 
+    file: "resources/adapters/NexteraPE-PE.fa"    #Path to the adapters, should be provided if trimming for short reads is set to true. 
     seedMissmatches: '2' #Specifies the maximum mismatch count which will still allow a full match to be performed
     palindromeClipThreshold: '30' #Specifies how accurate the match between the two 'adapter ligated' reads must be for PE palindrome read alignment.
     simpleClipThreshold: '10' #Specifies how accurate the match between any adapter etc. sequence must be against a read.

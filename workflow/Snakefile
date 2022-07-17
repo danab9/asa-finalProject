@@ -2,7 +2,7 @@ configfile : "config/config.yaml"
 import pandas as pd
 import os
 samples = pd.read_csv(config["samples"], index_col="sample", sep ='\t') # Use print(samples) to check if the tsv has the right format. 
-IDS = [sample for sample in list(samples.index)]
+IDS = [sample for sample in list(samples.index)][3:]
 wildcard_constraints:
     sample = "[^/]+" # Defines that a "/" is not allowed in sample names as was stated in the README.  
 
@@ -27,8 +27,8 @@ busco_lin_name = os.path.basename(config["busco_params"]["lineage"])
 rule all:
     input: 
         genomes = expand("results/genomes/{sample}.fasta", sample = IDS), # Generates the genomes for all samples through (hybrid) assembly. 
-        qc_preprocessing = "results/qc/multiqc_report.html" if (config["qc"]["short"] == "True" or config["qc"]["long"] == "True") else [],  # Generates an aggregated report for the quality control done during preprocessing if qc:long or qc:short is set to true. 
-        qc_decontamination = "results/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [], # Generates a screening report during preprocessing if screening:long or screening:short is set to true. 
+        #qc_preprocessing = "results/qc/multiqc_report.html" if (config["qc"]["short"] == "True" or config["qc"]["long"] == "True") else [],  # Generates an aggregated report for the quality control done during preprocessing if qc:long or qc:short is set to true. 
+        #qc_decontamination = "results/kraken/multiqc_report.html" if (config["screening"]["short"] == "True" or config["screening"]["long"] == "True") else [], # Generates a screening report during preprocessing if screening:long or screening:short is set to true. 
         # qc_assembly = # Generates aggregated tables of the QUAST and optionally the BUSCO metrics for the assembled genomes. 
         downstream_analyses = "results/logs/downstream_analyses.done", # Triggers the various downstream analyses steps, including MLST, plasmid, virulence factor and antbiotic resistance screening. 
 
@@ -40,7 +40,7 @@ rule all:
         # #roary = if len(samples.index) <2 checkNumberSampels else s"results/pangenome/sample1.txt"
         # roary = "results/pangenome/core_gene_alignment.aln",
         # filtered_core_aln = "results/pangenome/core_gene_alignment_filtered.aln" if config["blacklist"] != '' else [], 
-        phylogeny = "results/tree/tree.png"
+        #phylogeny = "results/tree/tree.png"
         # annotation = "results/annotations/sample2_genes.gff"
         #test = "test_aggregate_tables.txt",
         #decontaminate = "results/sam_contaminations/short/sample1.sam",

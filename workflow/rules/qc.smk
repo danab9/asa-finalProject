@@ -40,8 +40,8 @@ rule fastqc_trimmed:
     shell:
         """
         fastqc {input.trimmed} -o results/qc/trimmed/short &> {log}
-        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.html results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_short_trimmed_fastqc.html
-        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.zip results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_short_trimmed_fastqc.zip
+        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.html results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_short_trimmed_{wildcards.paired}_fastqc.html
+        mv results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_{wildcards.paired}_fastqc.zip results/qc/trimmed/short/{wildcards.sample}_{wildcards.number}_short_trimmed_{wildcards.paired}_fastqc.zip
         """
     
 rule longqc_untrimmed:
