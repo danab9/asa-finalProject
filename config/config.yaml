@@ -30,7 +30,7 @@ qc:
 hybrid_assembly: "True" 
 busco: "True"
 #Analysis 
-mlst: 'False'
+mlst: 'True'
 resistance: 'False'
 virulence: 'False'
 plasmids: 'False'

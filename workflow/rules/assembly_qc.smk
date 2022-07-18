@@ -42,7 +42,6 @@ rule busco:
         mv results/qc/assembly/BUSCO/{wildcards.sample}/run_{params.lineage}/short_summary.txt results/qc/assembly/BUSCO/{wildcards.sample}/short_summary_{wildcards.sample}.txt
         """ # Moves output files, such that they appear by sample name and not double in the MultiQC report
 
-
 rule multiqc_assembly:
     """
     Accumulation of Quality Control BUSCO and Quast reports of the assembly
@@ -59,4 +58,11 @@ rule multiqc_assembly:
     params:
         extra=config["multiqc"]["extra"]
     shell:
-        "multiqc results/qc/assembly {params.extra} -o results/qc/assembly -f &> {log}" # -f replaces existing multiQC
+        """
+        multiqc results/qc/assembly {params.extra} -o results/qc/assembly -f &> {log}
+        rm -r -f busco_downloads &> {log}
+        rm -r -f fixed_input_files &> {log}
+        """ # -f replaces existing multiQC
+
+
+# TODO: remove the busco_downloads and fixed_input_files folder after multiqc. Make sure it does not throw errors when the folder dos not exist; rm -r -f busco_downloads. 
