@@ -49,6 +49,57 @@ rule filter_msa:
 #     shell:
 #         "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --nthreads {threads} &> {log}"
 
+rule roary_tree:
+    """
+    create phylogenetic tree out of core genome alignment using FastTree script, provided by roary
+    https://sanger-pathogens.github.io/Roary/
+    """
+    input:
+        alignment =  "results/pangenome/core_gene_alignment.aln"
+    output:
+        tree = "results/tree/tree.newick"
+    log:
+        "results/logs/tree/roary_tree.log"
+    threads:
+        1  # FastTree doesn't seem to have thread specification flag
+    params:
+        extra = config["tree"]["extra"]
+    conda:
+        "../envs/pangenome.yaml"
+    shell:
+        "FastTree -nt -gtr {input.alignment} {params.extra} > {output.tree} 2> {log}"
+
+rule install_plot_roary:
+    """
+    install script for nice visualization of core genome phlogenetic tree, designed for roary output
+    https://github.com/sanger-pathogens/Roary/tree/master/contrib/roary_plots
+    """
+    output:
+        script = "results/installations/roaryplots/roary_plots.py"
+    log:
+        "results/logs/installation_roaryplots.log"
+    threads: 1
+    shell:
+        "wget https://raw.githubusercontent.com/sanger-pathogens/Roary/master/contrib/roary_plots/roary_plots.py -P results/installations/roaryplots/ 2> {log}"
+
+
+rule plot_tree:
+    """
+    Plot tree output of core genome alignmetn by roary, using roary's designated script
+    """
+    input:
+        tree = "results/tree/tree.newick",
+        gene_presence_csv = "results/pangenome/gene_presence_absence.csv",
+        script = "results/installations/roaryplots/roary_plots.py"
+    output:
+        touch("treeplot.done")
+    conda:
+        "../envs/roaryplot.yaml"
+    threads: 1
+    shell:
+        "python {input.script} {input.tree} {input.gene_presence_csv}"
+
+
 rule visualize_tree:
     """
     Visualizes the newick format of the phylogenetic tree using a python script. 

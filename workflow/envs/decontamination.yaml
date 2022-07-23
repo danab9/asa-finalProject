@@ -8,5 +8,3 @@ dependencies:
   - bowtie2=2.4.5
   - kraken2=2.1.2
   - minimap2=2.24
-  
-prefix: /Users/danabarilan/opt/miniconda3/envs/seqAnalysis
