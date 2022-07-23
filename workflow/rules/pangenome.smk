@@ -18,11 +18,11 @@ rule pangenome:
         percentage = config["roary"]["percentage_threshold"],
     conda:
         "../envs/pangenome.yaml"
-    shell:  # run roary, then extract content from randomally names folder to the results/pangenome/ folder.  
+    shell:  # run roary, then extract content from randomally named folder to the results/pangenome/ folder.  
         """
         roary -f results/pangenome/  -e --mafft -p {threads} -cd {params.percentage} {params.extra} {input.annotation} &> {log}
-        mv results/pangenome/*/* results/pangenome/
-        rmdir results/pangenome/*/
+        mv results/pangenome/_*/* results/pangenome/
+        rmdir results/pangenome/_*/
         """  
         # cp results/pangenome/*/core_gene_alignment.aln {output.msa}
 #removed {wildcards.sample}  from -o. 
