@@ -85,19 +85,28 @@ rule install_plot_roary:
 
 rule plot_tree:
     """
-    Plot tree output of core genome alignmetn by roary, using roary's designated script
+    Plot tree output of core genome alignmetn by roary, using roary's additional designated script 
+    https://github.com/sanger-pathogens/Roary/tree/master/contrib/roary_plots
     """
     input:
         tree = "results/tree/tree.newick",
         gene_presence_csv = "results/pangenome/gene_presence_absence.csv",
         script = "results/installations/roaryplots/roary_plots.py"
     output:
-        touch("treeplot.done")
-    conda:
+        out_dir = directory("results/pangenome/plots/"),
+        freq = "results/pangenome/plots/pangenome_frequency.png",
+        mat = "results/pangenome/plots/pangenome_matrix.png", 
+        pie = "results/pangenome/plots/pangenome_pie.png"
+    conda:  
         "../envs/roaryplot.yaml"
     threads: 1
-    shell:
-        "python {input.script} {input.tree} {input.gene_presence_csv}"
+    params:
+        extra = config["plot_roary"]["extra"]
+    shell: # run roary_plots.py script and move output from main directory to results
+        """
+        python {input.script} {input.tree} {input.gene_presence_csv} {params.extra}
+        mv pangenome_frequency.png pangenome_matrix.png pangenome_pie.png {output.out_dir}
+        """
 
 
 rule visualize_tree:

@@ -34,6 +34,8 @@ mlst: 'True'
 resistance: 'False'
 virulence: 'False'
 plasmids: 'False'
+#Phylogeny
+roary_plots: 'True'
 
 
 #PARAMETERS
@@ -83,3 +85,6 @@ prokka:
 roary: 
   percentage_threshold: "95" #percentage of isolates a gene must be in to be core
   extra: "" #https://sanger-pathogens.github.io/Roary/
+plot_roary:
+  extra: "" # roary's additional visualization script;    https://github.com/sanger-pathogens/Roary/tree/master/contrib/roary_plots 
+
