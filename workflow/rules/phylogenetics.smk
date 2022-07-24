@@ -1,53 +1,23 @@
-# rule msa:
-#     input:
-#         sequences = expand("results/fasta/{sample}.fa", sample=IDS) # added "results/" before each path
-#     output:
-#         alignment = "results/msa/alignment.fasta"
-#     log:
-#         "results/logs/msa/msa.log"
-#     threads: 6
-#     conda:
-#         "../envs/env.yaml"
-#     shell:
-#         "python3 -m augur align --sequences {input.sequences} -o {output.alignment} --threads {threads} &> {log}"
-
 rule filter_msa:
     """
     Leaves out samples specified by the user. Runs a designated python script.
     """
     input:
-        msa="results/msa/core_gene_alignment.fa",
+        msa="results/pangenome/core_gene_alignment.aln",
+        gpa = "results/pangenome/gene_presence_absence.csv",
         black_list=config["blacklist"]
     output:
-        filtered = "results/msa/core_gene_alignment_filtered.fa"
+        filtered_fa = "results/pangenome/core_gene_alignment_filtered.aln",
+        filtered_gpa = "results/pangenome/gene_presence_absence_filtered.csv"
     log:
         "results/logs/blacklist.log"
     threads:
         1
     conda:
-        "../envs/biopython.yaml"
+        "../envs/roaryplot.yaml"
     script:
         "../scripts/filter_samples.py"
 
-
-# rule tree:
-#     """
-#     Creates a phylogenetic tree using the augur software of nextstrain. The method can be set in the configuration file.
-#     """
-#     input: # takes filtered file if blacklist is specified by the user
-#         alignment = "results/msa/core_gene_alignment.fa" if config["blacklist"] == '' else "results/msa/core_gene_alignment_filtered.fa"   
-#     output:
-#         tree = "results/tree/tree.nwk"
-#     log:
-#         "results/logs/tree/tree.log"
-#     threads: 6
-#     params:
-#         method = config["tree"]["method"],
-#         extra = config["tree"]["extra"],
-#     conda:
-#         "../envs/phylogenetics.yaml"
-#     shell:
-#         "augur tree --method {params.method} {params.extra} --alignment {input.alignment} --output {output.tree} --nthreads {threads} &> {log}"
 
 rule roary_tree:
     """
@@ -55,13 +25,13 @@ rule roary_tree:
     https://sanger-pathogens.github.io/Roary/
     """
     input:
-        alignment =  "results/pangenome/core_gene_alignment.aln"
+        alignment =  "results/pangenome/core_gene_alignment.aln" if config["blacklist"] == '' else "results/pangenome/core_gene_alignment_filtered.aln"
     output:
         tree = "results/tree/tree.newick"
     log:
         "results/logs/tree/roary_tree.log"
     threads:
-        1  # FastTree doesn't seem to have thread specification flag
+        1  # FastTree doesn't seem to have thread specification option
     params:
         extra = config["tree"]["extra"]
     conda:
@@ -90,7 +60,7 @@ rule plot_tree:
     """
     input:
         tree = "results/tree/tree.newick",
-        gene_presence_csv = "results/pangenome/gene_presence_absence.csv",
+        gene_presence_csv = "results/pangenome/gene_presence_absence.csv" if config["blacklist"] == '' else "results/pangenome/gene_presence_absence_filtered.csv",
         script = "results/installations/roaryplots/roary_plots.py"
     output:
         out_dir = directory("results/pangenome/plots/"),
@@ -99,7 +69,7 @@ rule plot_tree:
         pie = "results/pangenome/plots/pangenome_pie.png"
     conda:  
         "../envs/roaryplot.yaml"
-    threads: 1
+    threads: 1  # there is no multithreads option to roary_plots.py script 
     params:
         extra = config["plot_roary"]["extra"]
     shell: # run roary_plots.py script and move output from main directory to results

@@ -27,4 +27,3 @@ rule pangenome:
         # cp results/pangenome/*/core_gene_alignment.aln {output.msa}
 #removed {wildcards.sample}  from -o. 
 #-o results/pangenome/
-

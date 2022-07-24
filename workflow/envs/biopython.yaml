@@ -3,7 +3,8 @@ channels:
   - bioconda
   - conda-forge
   - defaults
-  - r
+  - anaconda
 dependencies:
   - biopython=1.79
   - python=3.9
+  - pandas=1.4.3

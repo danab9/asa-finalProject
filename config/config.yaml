@@ -2,12 +2,12 @@
 #-----------------
 samples: "resources/samples.tsv"
 contamination_reference:
-  long: "" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
-  short: "resources/references/contamination_long.fna" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
+  long: "resources/references/contamination_long.fna" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
+  short: "" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
 resistance_database: "" 
-blacklist: "" #"resources/blacklist.txt" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
+blacklist: "resources/blacklist.txt" #"resources/blacklist.txt" #A blacklist can optionally be provided to mask certain samples for the phylogenetic inference
 
 
 #OPTIONAL STEPS
@@ -21,7 +21,7 @@ screening:
   long: 'True'
   short: 'True'   
 decontamination: 
-  long: "True" 
+  long: "Fa;se" 
   short: "False"
 qc:
   long: 'True'
