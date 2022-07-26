@@ -35,8 +35,7 @@ rule resistance:
         "../envs/resistance.yaml"
     shell:
         """
-        rgi main -i {input.genome} --output_file {output.dir} {params.extra} --input_type contig -n {threads} 2> {log}
-        #rgi heatmap --input ../storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/results/resistance
+        rgi main -i {input.genome} --output_file {params.dir} {params.extra} --input_type contig -n {threads} 2> {log}
         """ 
 
 rule download_plasmids_db:
@@ -70,7 +69,7 @@ rule make_plasmids_db:
     log:
         "results/logs/plasmids/download_database_make.log"
     shell:
-        "makeblastdb -in results/plasmids_database//plsdb.fna -dbtype nucl -parse_seqids -logfile {log}"
+        "makeblastdb -in results/plasmids_database/plsdb.fna -dbtype nucl -parse_seqids -logfile {log}"
 
 rule plasmids:
     """

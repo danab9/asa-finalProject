@@ -2,8 +2,8 @@
 #-----------------
 samples: "resources/samples.tsv"
 contamination_reference:
-  long: "resources/references/contamination_long.fna" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
-  short: "" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
+  long: "../asa-finalProject-myrthe/asa-finalProject/resources/references/contamination_long.fna" #Should be provided if decontamination-long is set to True, and can be created based on the screening results.  
+  short: "../asa-finalProject-myrthe/asa-finalProject/resources/references/contamination_short.fna" #Should be provided if decontamination-short is set to True, and can be created based on the screening results.   
 virulence_database: "" #If virulence is set to True but no path is provided, the VF core DNA database will be downloaded and build automatically. 
 plasmids_database: ""  #If plasmids is set to True but no path is provided, the PLSD database will be downloaded and build automatically. 
 resistance_database: "" 
@@ -18,22 +18,22 @@ trimming:
   long: 'True'
   short: 'True'
 screening: 
-  long: 'True'
-  short: 'True'   
+  long: 'False'
+  short: 'False'   
 decontamination: 
-  long: "Fa;se" 
+  long: "False" 
   short: "False"
 qc:
-  long: 'True'
-  short: 'True'
+  long: 'False'
+  short: 'False'
 #Assembly 
 hybrid_assembly: "True" 
 busco: "True"
 #Analysis 
 mlst: 'True'
-resistance: 'False'
-virulence: 'False'
-plasmids: 'False'
+resistance: 'True'
+virulence: 'True'
+plasmids: 'True'
 #Phylogeny
 roary_plots: 'True'
 
@@ -62,7 +62,7 @@ porechop:
 unicycler:
   extra: "" #https://github.com/rrwick/Unicycler#method-hybrid-assembly
 kraken: 
-  database: "resources/kraken_db" #If screening for either long or short reads is set to true, a Kraken database should be provided here. 
+  database: "../asa-finalProject-myrthe/asa-finalProject/resources/kraken_db" #If screening for either long or short reads is set to true, a Kraken database should be provided here. 
   quick: "True" #https://github.com/DerrickWood/kraken2/wiki/Manual
 tree:
   method: "iqtree" #Algorithm used for infering the phylogeny {fasttree,raxml,iqtree}
