@@ -204,6 +204,8 @@ rule aggregate_resistance:
         "results/logs/resistance/aggregate.log"
     output: 
         csv = "results/resistance.csv"
+    conda:
+        "../envs/resistancescript.yaml"
     script:
         "../scripts/aggregate_resistance.py"
 

@@ -1,0 +1,7 @@
+name: resistancescript
+channels:
+  - defaults
+  - anaconda
+dependencies:
+  - python=3.9
+  - pandas=1.4.3
