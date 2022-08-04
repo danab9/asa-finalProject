@@ -63,7 +63,8 @@ rule make_plasmids_db:
     output:
         database = multiext(
             "results/plasmids_database/plsdb.fna",
-            ".nhr",".nin",".nog",".nsd",".nsi",".nsq")
+            ".ndb", ".nhr", ".nin", ".njs", ".nog", ".nos", ".not", ".nsq", 
+            ".ntf", ".nto")
     conda:
         "../envs/virulence.yaml"
     log:
@@ -80,10 +81,12 @@ rule plasmids:
         genome = "results/genomes/{sample}.fasta",
         database = multiext(
             "results/plasmids_database/plsdb.fna",
-            ".nhr",".nin",".nog",".nsd",".nsi",".nsq"
+            ".ndb", ".nhr", ".nin", ".njs", ".nog", ".nos", ".not", ".nsq", 
+            ".ntf", ".nto"
         ) if config["plasmids_database"] == "" else multiext(
             config["plasmids_database"],
-            ".nhr",".nin",".nog",".nsd",".nsi",".nsq"),
+            ".ndb", ".nhr", ".nin", ".njs", ".nog", ".nos", ".not", ".nsq", 
+            ".ntf", ".nto"),
         database_sequences = "results/plasmids_database/plsdb.fna"
     output:
         table = "results/plasmids/{sample}.tsv",
@@ -172,6 +175,8 @@ rule aggregate_plasmids:
         "results/logs/plasmids/aggregate.log"
     output: 
         csv = "results/plasmids.csv"
+    conda:
+        "../envs/aggregate.yaml"    
     script:
         "../scripts/aggregate_plasmids.py"
 
@@ -188,6 +193,8 @@ rule aggregate_virulence:
         "results/logs/virulence/aggregate.log"
     output: 
         csv = "results/virulence.csv"
+    conda:
+        "../envs/aggregate.yaml"
     script:
         "../scripts/aggregate_virulence.py"
 
@@ -205,7 +212,7 @@ rule aggregate_resistance:
     output: 
         csv = "results/resistance.csv"
     conda:
-        "../envs/resistancescript.yaml"
+        "../envs/aggregate.yaml"
     script:
         "../scripts/aggregate_resistance.py"
 

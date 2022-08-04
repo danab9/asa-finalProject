@@ -1,0 +1,8 @@
+name: aggregate
+channels:
+  - defaults
+  - anaconda
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pandas=1.4.3
