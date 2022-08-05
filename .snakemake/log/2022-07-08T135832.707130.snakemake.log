@@ -1,8 +1,0 @@
-KeyError in line 4 of /storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile:
-'sample'
-  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile", line 4, in <module>
-  File "/storage/mi/danab93/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/util/_decorators.py", line 311, in wrapper
-  File "/storage/mi/danab93/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 680, in read_csv
-  File "/storage/mi/danab93/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 581, in _read
-  File "/storage/mi/danab93/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1255, in read
-  File "/storage/mi/danab93/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 271, in read

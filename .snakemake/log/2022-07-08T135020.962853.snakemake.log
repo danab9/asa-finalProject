@@ -1,3 +1,0 @@
-TypeError in line 4 of /storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile:
-string indices must be integers
-  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile", line 4, in <module>

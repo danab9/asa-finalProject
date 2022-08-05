@@ -1,4 +1,0 @@
-KeyError in line 15 of /storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/rules/assembly.smk:
-'assembly'
-  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile", line 14, in <module>
-  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/rules/assembly.smk", line 15, in <module>

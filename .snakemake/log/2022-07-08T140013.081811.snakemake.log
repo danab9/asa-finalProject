@@ -1,4 +1,0 @@
-KeyError in line 37 of /storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/rules/qc.smk:
-'trailing'
-  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/Snakefile", line 13, in <module>
-  File "/storage/mi/danab93/asa-finalProject-myrthe/asa-finalProject/workflow/rules/qc.smk", line 37, in <module>
