@@ -34,7 +34,7 @@ Further **note** that the sample IDs should not contain a slash "\"!
 - **Virulence database**: If the virulence analysis step is set to True, a path can be provided to the database with virulence factors. If no path is provided, the VF core DNA database will be downloaded and build automatically, which is the default case. 
 - **Plasmids database**: If the plasmid analysis step is set to True, a path can be provided to the database with reference plasmids. If no path is provided, the PLSDB database will be downloaded and build automatically, which is the default case. 
 - **Kraken database**: If screening for either long or short reads is set to true, a Kraken database should be provided. By default this is under the directory `resources/kraken_db`
-- **Blacklist**: a blacklist can optionally be provided to mask certain samples for the phylogenetic inference. The default path is `resources/blacklist.TODO`. 
+- **Blacklist**: a blacklist file can optionally be provided to mask certain samples for the phylogenetic inference. 
 - **Trimming short read adapters**: To cut adapter from short Illumina reads, add the path to the adapter fasta file in the configuration file, under trimmomatic, illuminaclip, file. The default path is `resources/adapters/TruSeq3-PE.fa`. Complete the other illuminaclip values as suits your research. 
 See full manual by `trimmomatic` [here](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf).
 <!-- - **Lineage database**: TODO for BUSCO : offline parameter.  -->
