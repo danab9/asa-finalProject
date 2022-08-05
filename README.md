@@ -37,7 +37,6 @@ Further **note** that the sample IDs should not contain a slash "\"!
 - **Blacklist**: a blacklist file can optionally be provided to mask certain samples for the phylogenetic inference. 
 - **Trimming short read adapters**: To cut adapter from short Illumina reads, add the path to the adapter fasta file in the configuration file, under trimmomatic, illuminaclip, file. The default path is `resources/adapters/TruSeq3-PE.fa`. Complete the other illuminaclip values as suits your research. 
 See full manual by `trimmomatic` [here](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf).
-- **Lineage database**: A BUSCO database can be provided as a file (with offilne parameter set to 'True', or as a name to be searched by the program online. If searched online, the database will be found in `results/`.For available databases see BUSCO's manual [here](https://busco.ezlab.org/busco_userguide.html).
 
 ### Optional steps
 Each of the optional steps can be set to "True" or "False" to indicate whether the respective step should be performed. 
