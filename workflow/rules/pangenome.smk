@@ -24,6 +24,3 @@ rule pangenome:
         mv results/pangenome/_*/* results/pangenome/
         rmdir results/pangenome/_*/
         """  
-        # cp results/pangenome/*/core_gene_alignment.aln {output.msa}
-#removed {wildcards.sample}  from -o. 
-#-o results/pangenome/
