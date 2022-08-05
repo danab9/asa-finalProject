@@ -16,12 +16,6 @@ include: "rules/annotation.smk"
 include: "rules/assembly_qc.smk"
 include: "rules/longqc_installation.smk"
 
-# # if number of samples too small: stop run
-# def checkNumberSampels():
-#     if len(samples.index) < 2:
-#         print("Error: number of samples too small for pan genome analysis. Please provide at least 2 sample! \n Aborting...")
-#         return []
-#     
 
 rule all:
     input: 
@@ -33,19 +27,6 @@ rule all:
         roary_plots=expand("results/pangenome/plots/pangenome_{x}.png", x=["frequency","matrix","pie"]) if config['roary_plots'] == 'True' else [],
         tree="results/tree/tree.png"
         
-        #TEMPORARY INPUTS
-        #longqc_untrimmed = expand("results/qc/untrimmed/long/{sample}/web_summary.html", sample=IDS) if config["qc"]["long"] =="True" else [],  # still not working 
-        # #decontaminated_long = "results/fastq/decontaminated/long/ERR4082859.fq", 
-        #quast = "results/qc/assembly/quast/sample1/report.txt",
-        #busco = "results/qc/assembly/BUSCO/sample1/short_summary.specific." + busco_lin_name + ".sample1.json" if config["busco"]=='True' else [],
-        # #roary = if len(samples.index) <2 checkNumberSampels else s"results/pangenome/sample1.txt"
-        # roary = "results/pangenome/core_gene_alignment.aln",
-        # filtered_core_aln = "results/pangenome/core_gene_alignment_filtered.aln" if config["blacklist"] != '' else [], 
-        #phylogeny = "results/tree/tree.png"
-        # annotation = "results/annotations/sample2_genes.gff"
-        
-        #test = "test_aggregate_tables.txt",
-        #decontaminate = "results/sam_contaminations/short/sample1.sam",
-
+   
 
         
