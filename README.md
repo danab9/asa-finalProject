@@ -37,7 +37,6 @@ Further **note** that the sample IDs should not contain a slash "\"!
 - **Blacklist**: a blacklist file can optionally be provided to mask certain samples for the phylogenetic inference. 
 - **Trimming short read adapters**: To cut adapter from short Illumina reads, add the path to the adapter fasta file in the configuration file, under trimmomatic, illuminaclip, file. The default path is `resources/adapters/TruSeq3-PE.fa`. Complete the other illuminaclip values as suits your research. 
 See full manual by `trimmomatic` [here](http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf).
-<!-- - **Lineage database**: TODO for BUSCO : offline parameter.  -->
 
 ### Optional steps
 Each of the optional steps can be set to "True" or "False" to indicate whether the respective step should be performed. 
@@ -62,7 +61,7 @@ The results can be found under the result directory after running the pipeline. 
 - **Assembled genomes**: The assembled genomes can be found as FASTA files under `results/genomes`.
 - **Annotations**: The annotations of the genomes can be found as GFF files under `results/annotations`.
 - **Quality metrics**: Quality metrics are available under `results/qc`. The preprocessing quality metrics are aggregated for the multiple samples, and so are the quality metrics of assembled genomes. 
-- **Downstream analyses**: Results of MLST, plasmid, antibiotic resistance and virulence factor screening are aggregated and can be found under `TODO`. 
+- **Downstream analyses**: Results of MLST, plasmid, antibiotic resistance and virulence factor screening are aggregated into csv files and can be found under `results/`. 
 - **Core genome**: The core genome, represented as a multiple sequence alignment, can be found as a signle file under `results/pangenome`. 
 - **Phylogenetic tree**: The phylogenetic tree can be found und as a .png under `results/tree`.
 
