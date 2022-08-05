@@ -28,7 +28,7 @@ qc:
   short: 'False'
 #Assembly 
 hybrid_assembly: "True" 
-busco: "False"
+busco: "True"
 #Analysis 
 mlst: 'True'
 resistance: 'True'

@@ -64,5 +64,3 @@ rule multiqc_assembly:
         rm -r -f fixed_input_files &> {log}
         """ # -f replaces existing multiQC
 
-
-# TODO: remove the busco_downloads and fixed_input_files folder after multiqc. Make sure it does not throw errors when the folder dos not exist; rm -r -f busco_downloads. 
